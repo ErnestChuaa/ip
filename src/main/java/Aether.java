@@ -1,10 +1,13 @@
+import java.util.Scanner;
+
 /**
  * Entry point for the Aether chatbot.
- * Prints a greeting and a farewell, then exits.
+ * Greets the user, echoes each command until they type {@code bye}, then exits.
  */
 public class Aether {
     private static final String NAME = "Aether";
     private static final String LINE = "____________________________________________________________";
+    private static final String EXIT_COMMAND = "bye";
 
     public static void main(String[] args) {
         String banner = "    _         _   _               \n"
@@ -13,12 +16,27 @@ public class Aether {
                 + " / ___ \\  __/| |_| | | |  __/ |   \n"
                 + "/_/   \\_\\___|\\__|_| |_|\\___|_|   \n";
 
+        printMessage(banner + "Hello! I'm " + NAME + ".\nWhat can I do for you?");
+
+        Scanner scanner = new Scanner(System.in);
+        String command = scanner.nextLine();
+        // Keep echoing until the user types the exit command.
+        while (!command.equals(EXIT_COMMAND)) {
+            printMessage(command);
+            command = scanner.nextLine();
+        }
+        printMessage("Bye. Hope to see you again soon!");
+        scanner.close();
+    }
+
+    /**
+     * Prints {@code text} wrapped in the chatbot's horizontal divider lines.
+     *
+     * @param text the message to show to the user
+     */
+    private static void printMessage(String text) {
         System.out.println(LINE);
-        System.out.print(banner);
-        System.out.println("Hello! I'm " + NAME + ".");
-        System.out.println("What can I do for you?");
-        System.out.println(LINE);
-        System.out.println("Bye. Hope to see you again soon!");
+        System.out.println(text);
         System.out.println(LINE);
     }
 }
