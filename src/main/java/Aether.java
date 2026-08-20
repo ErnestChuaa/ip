@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 /**
  * Entry point for the Aether chatbot.
- * Stores todos, deadlines, and events in memory, lists them, and can mark or unmark them as done.
+ * Stores todos, deadlines, and events in a {@code Task[]} (polymorphism) and can mark or unmark them as done.
  */
 public class Aether {
     private static final String NAME = "Aether";
@@ -27,6 +27,7 @@ public class Aether {
         printMessage(banner + "Hello! I'm " + NAME + ".\nWhat can I do for you?");
 
         // Tasks stay in memory only; they are not written to disk.
+        // Todo, Deadline, and Event objects are stored together as Task (polymorphism).
         Task[] tasks = new Task[MAX_TASKS];
         int taskCount = 0;
 
@@ -64,7 +65,7 @@ public class Aether {
      */
     private static int addTodo(Task[] tasks, int taskCount, String command) {
         String description = command.substring((TODO_COMMAND + " ").length()).trim();
-        return addTask(tasks, taskCount, new Task(description));
+        return addTask(tasks, taskCount, new Todo(description));
     }
 
     /**
@@ -81,7 +82,7 @@ public class Aether {
         int byIndex = rest.indexOf("/by");
         String description = rest.substring(0, byIndex).trim();
         String by = rest.substring(byIndex + "/by".length()).trim();
-        return addTask(tasks, taskCount, new Task(description, by));
+        return addTask(tasks, taskCount, new Deadline(description, by));
     }
 
     /**
@@ -100,7 +101,7 @@ public class Aether {
         String description = rest.substring(0, fromIndex).trim();
         String from = rest.substring(fromIndex + "/from".length(), toIndex).trim();
         String to = rest.substring(toIndex + "/to".length()).trim();
-        return addTask(tasks, taskCount, new Task(description, from, to));
+        return addTask(tasks, taskCount, new Event(description, from, to));
     }
 
     /**
