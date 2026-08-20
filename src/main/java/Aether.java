@@ -3,7 +3,7 @@ import java.util.Scanner;
 /**
  * Entry point for the Aether chatbot.
  * Stores todos, deadlines, and events in a {@code Task[]} (polymorphism) and can mark or unmark them as done.
- * Invalid input prints an error and the chatbot keeps running.
+ * Invalid input is reported with {@link AetherException}; the chatbot prints the message and keeps running.
  */
 public class Aether {
     private static final String NAME = "Aether";
@@ -38,22 +38,26 @@ public class Aether {
         Scanner scanner = new Scanner(System.in);
         String command = scanner.nextLine();
         while (!command.equals(EXIT_COMMAND)) {
-            if (command.trim().isEmpty()) {
-                printMessage("Please type a command. " + COMMAND_HINT);
-            } else if (command.trim().equals(LIST_COMMAND)) {
-                printMessage(formatTaskList(tasks, taskCount));
-            } else if (isCommand(command, MARK_COMMAND)) {
-                markTask(tasks, taskCount, command);
-            } else if (isCommand(command, UNMARK_COMMAND)) {
-                unmarkTask(tasks, taskCount, command);
-            } else if (isCommand(command, TODO_COMMAND)) {
-                taskCount = addTodo(tasks, taskCount, command);
-            } else if (isCommand(command, DEADLINE_COMMAND)) {
-                taskCount = addDeadline(tasks, taskCount, command);
-            } else if (isCommand(command, EVENT_COMMAND)) {
-                taskCount = addEvent(tasks, taskCount, command);
-            } else {
-                printMessage("I don't recognise that command. " + COMMAND_HINT);
+            try {
+                if (command.trim().isEmpty()) {
+                    throw new AetherException("Please type a command. " + COMMAND_HINT);
+                } else if (command.trim().equals(LIST_COMMAND)) {
+                    printMessage(formatTaskList(tasks, taskCount));
+                } else if (isCommand(command, MARK_COMMAND)) {
+                    markTask(tasks, taskCount, command);
+                } else if (isCommand(command, UNMARK_COMMAND)) {
+                    unmarkTask(tasks, taskCount, command);
+                } else if (isCommand(command, TODO_COMMAND)) {
+                    taskCount = addTodo(tasks, taskCount, command);
+                } else if (isCommand(command, DEADLINE_COMMAND)) {
+                    taskCount = addDeadline(tasks, taskCount, command);
+                } else if (isCommand(command, EVENT_COMMAND)) {
+                    taskCount = addEvent(tasks, taskCount, command);
+                } else {
+                    throw new AetherException("I don't recognise that command. " + COMMAND_HINT);
+                }
+            } catch (AetherException e) {
+                printMessage(e.getMessage());
             }
             command = scanner.nextLine();
         }
@@ -96,12 +100,12 @@ public class Aether {
      * @param taskCount how many tasks are currently stored
      * @param command the full user command
      * @return the updated task count
+     * @throws AetherException if the description is empty or the list is full
      */
-    private static int addTodo(Task[] tasks, int taskCount, String command) {
+    private static int addTodo(Task[] tasks, int taskCount, String command) throws AetherException {
         String description = getArguments(command, TODO_COMMAND);
         if (description.isEmpty()) {
-            printMessage("The description of a todo cannot be empty. Try: todo borrow book");
-            return taskCount;
+            throw new AetherException("The description of a todo cannot be empty. Try: todo borrow book");
         }
         return addTask(tasks, taskCount, new Todo(description));
     }
@@ -114,23 +118,23 @@ public class Aether {
      * @param taskCount how many tasks are currently stored
      * @param command the full user command
      * @return the updated task count
+     * @throws AetherException if the description or {@code /by} date is missing, or the list is full
      */
-    private static int addDeadline(Task[] tasks, int taskCount, String command) {
+    private static int addDeadline(Task[] tasks, int taskCount, String command) throws AetherException {
         String rest = getArguments(command, DEADLINE_COMMAND);
         int byIndex = rest.indexOf("/by");
         if (byIndex < 0) {
-            printMessage("A deadline needs a /by date. Try: deadline return book /by Sunday");
-            return taskCount;
+            throw new AetherException("A deadline needs a /by date. Try: deadline return book /by Sunday");
         }
         String description = rest.substring(0, byIndex).trim();
         String by = rest.substring(byIndex + "/by".length()).trim();
         if (description.isEmpty()) {
-            printMessage("The description of a deadline cannot be empty. Try: deadline return book /by Sunday");
-            return taskCount;
+            throw new AetherException(
+                    "The description of a deadline cannot be empty. Try: deadline return book /by Sunday");
         }
         if (by.isEmpty()) {
-            printMessage("The /by date of a deadline cannot be empty. Try: deadline return book /by Sunday");
-            return taskCount;
+            throw new AetherException(
+                    "The /by date of a deadline cannot be empty. Try: deadline return book /by Sunday");
         }
         return addTask(tasks, taskCount, new Deadline(description, by));
     }
@@ -143,36 +147,33 @@ public class Aether {
      * @param taskCount how many tasks are currently stored
      * @param command the full user command
      * @return the updated task count
+     * @throws AetherException if the description, {@code /from}, or {@code /to} is missing, or the list is full
      */
-    private static int addEvent(Task[] tasks, int taskCount, String command) {
+    private static int addEvent(Task[] tasks, int taskCount, String command) throws AetherException {
         String rest = getArguments(command, EVENT_COMMAND);
         int fromIndex = rest.indexOf("/from");
         int toIndex = rest.indexOf("/to");
         if (fromIndex < 0 || toIndex < 0) {
-            printMessage("An event needs /from and /to times. Try: event project meeting /from Mon 2pm /to 4pm");
-            return taskCount;
+            throw new AetherException(
+                    "An event needs /from and /to times. Try: event project meeting /from Mon 2pm /to 4pm");
         }
         if (toIndex < fromIndex) {
-            printMessage("Put /from before /to. Try: event project meeting /from Mon 2pm /to 4pm");
-            return taskCount;
+            throw new AetherException("Put /from before /to. Try: event project meeting /from Mon 2pm /to 4pm");
         }
         String description = rest.substring(0, fromIndex).trim();
         String from = rest.substring(fromIndex + "/from".length(), toIndex).trim();
         String to = rest.substring(toIndex + "/to".length()).trim();
         if (description.isEmpty()) {
-            printMessage("The description of an event cannot be empty. "
+            throw new AetherException("The description of an event cannot be empty. "
                     + "Try: event project meeting /from Mon 2pm /to 4pm");
-            return taskCount;
         }
         if (from.isEmpty()) {
-            printMessage("The /from time of an event cannot be empty. "
+            throw new AetherException("The /from time of an event cannot be empty. "
                     + "Try: event project meeting /from Mon 2pm /to 4pm");
-            return taskCount;
         }
         if (to.isEmpty()) {
-            printMessage("The /to time of an event cannot be empty. "
+            throw new AetherException("The /to time of an event cannot be empty. "
                     + "Try: event project meeting /from Mon 2pm /to 4pm");
-            return taskCount;
         }
         return addTask(tasks, taskCount, new Event(description, from, to));
     }
@@ -184,11 +185,11 @@ public class Aether {
      * @param taskCount how many tasks are currently stored
      * @param task the task to add
      * @return the updated task count
+     * @throws AetherException if the list already holds {@link #MAX_TASKS} tasks
      */
-    private static int addTask(Task[] tasks, int taskCount, Task task) {
+    private static int addTask(Task[] tasks, int taskCount, Task task) throws AetherException {
         if (taskCount >= MAX_TASKS) {
-            printMessage("Cannot add more tasks. The list is full.");
-            return taskCount;
+            throw new AetherException("Cannot add more tasks. The list is full.");
         }
         tasks[taskCount] = task;
         taskCount++;
@@ -203,12 +204,10 @@ public class Aether {
      * @param tasks the stored tasks
      * @param taskCount how many tasks are currently stored
      * @param command the full user command, e.g. {@code mark 2}
+     * @throws AetherException if the task number is missing, not a whole number, or out of range
      */
-    private static void markTask(Task[] tasks, int taskCount, String command) {
+    private static void markTask(Task[] tasks, int taskCount, String command) throws AetherException {
         int index = parseTaskIndex(command, MARK_COMMAND, taskCount);
-        if (index < 0) {
-            return;
-        }
         tasks[index].markAsDone();
         printMessage("Nice! I've marked this task as done:\n  " + tasks[index]);
     }
@@ -219,42 +218,38 @@ public class Aether {
      * @param tasks the stored tasks
      * @param taskCount how many tasks are currently stored
      * @param command the full user command, e.g. {@code unmark 2}
+     * @throws AetherException if the task number is missing, not a whole number, or out of range
      */
-    private static void unmarkTask(Task[] tasks, int taskCount, String command) {
+    private static void unmarkTask(Task[] tasks, int taskCount, String command) throws AetherException {
         int index = parseTaskIndex(command, UNMARK_COMMAND, taskCount);
-        if (index < 0) {
-            return;
-        }
         tasks[index].markAsNotDone();
         printMessage("OK, I've marked this task as not done yet:\n  " + tasks[index]);
     }
 
     /**
      * Reads the 1-based task number from a command such as {@code mark 2}.
-     * Prints an error and returns {@code -1} if the number is missing, not a whole number, or out of range.
      *
      * @param command the full user command
      * @param commandWord the leading word to skip, e.g. {@code mark}
      * @param taskCount how many tasks are currently stored
-     * @return the 0-based index, or {@code -1} if the number cannot be used
+     * @return the 0-based index
+     * @throws AetherException if the number is missing, not a whole number, or out of range
      */
-    private static int parseTaskIndex(String command, String commandWord, int taskCount) {
+    private static int parseTaskIndex(String command, String commandWord, int taskCount) throws AetherException {
         String arguments = getArguments(command, commandWord);
         if (arguments.isEmpty()) {
-            printMessage("Please give a task number after " + commandWord + ". Try: " + commandWord + " 1");
-            return -1;
+            throw new AetherException(
+                    "Please give a task number after " + commandWord + ". Try: " + commandWord + " 1");
         }
         int taskNumber;
         try {
             taskNumber = Integer.parseInt(arguments);
         } catch (NumberFormatException e) {
-            printMessage("The task number must be a whole number. Try: " + commandWord + " 1");
-            return -1;
+            throw new AetherException("The task number must be a whole number. Try: " + commandWord + " 1");
         }
         int index = taskNumber - 1;
         if (index < 0 || index >= taskCount) {
-            printMessage("That task number does not exist. Use list to see the current numbers.");
-            return -1;
+            throw new AetherException("That task number does not exist. Use list to see the current numbers.");
         }
         return index;
     }

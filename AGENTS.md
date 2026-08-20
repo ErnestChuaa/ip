@@ -45,4 +45,4 @@ Include tests for incorrect input (empty descriptions, unknown commands, missing
 
 ## Error handling
 
-Invalid user input must not crash the chatbot. Print a specific error that explains the problem and how to correct it, then keep waiting for the next command. When adding a new command, also handle empty arguments and other malformed input for that command.
+Invalid user input must not crash the chatbot. Throw `AetherException` (a checked exception) with a specific message that explains the problem and how to correct it. Catch `AetherException` in the main command loop, print the message, and keep waiting for the next command. Do not catch generic `Exception`, so programming bugs still surface. When adding a new command, throw `AetherException` for empty arguments and other malformed input for that command.
