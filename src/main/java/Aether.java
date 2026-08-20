@@ -3,6 +3,7 @@ import java.util.Scanner;
 /**
  * Entry point for the Aether chatbot.
  * Stores todos, deadlines, and events in a {@code Task[]} (polymorphism) and can mark or unmark them as done.
+ * Invalid input prints an error and the chatbot keeps running.
  */
 public class Aether {
     private static final String NAME = "Aether";
@@ -14,6 +15,9 @@ public class Aether {
     private static final String TODO_COMMAND = "todo";
     private static final String DEADLINE_COMMAND = "deadline";
     private static final String EVENT_COMMAND = "event";
+    /** Commands the user can type; shown in error messages as a hint. */
+    private static final String COMMAND_HINT =
+            "Try: list, todo, deadline, event, mark, unmark, or bye.";
     /** Maximum number of tasks that can be stored in memory. */
     private static final int MAX_TASKS = 100;
 
@@ -34,25 +38,55 @@ public class Aether {
         Scanner scanner = new Scanner(System.in);
         String command = scanner.nextLine();
         while (!command.equals(EXIT_COMMAND)) {
-            if (command.equals(LIST_COMMAND)) {
+            if (command.trim().isEmpty()) {
+                printMessage("Please type a command. " + COMMAND_HINT);
+            } else if (command.trim().equals(LIST_COMMAND)) {
                 printMessage(formatTaskList(tasks, taskCount));
-            } else if (command.startsWith(MARK_COMMAND + " ")) {
+            } else if (isCommand(command, MARK_COMMAND)) {
                 markTask(tasks, taskCount, command);
-            } else if (command.startsWith(UNMARK_COMMAND + " ")) {
+            } else if (isCommand(command, UNMARK_COMMAND)) {
                 unmarkTask(tasks, taskCount, command);
-            } else if (command.startsWith(TODO_COMMAND + " ")) {
+            } else if (isCommand(command, TODO_COMMAND)) {
                 taskCount = addTodo(tasks, taskCount, command);
-            } else if (command.startsWith(DEADLINE_COMMAND + " ")) {
+            } else if (isCommand(command, DEADLINE_COMMAND)) {
                 taskCount = addDeadline(tasks, taskCount, command);
-            } else if (command.startsWith(EVENT_COMMAND + " ")) {
+            } else if (isCommand(command, EVENT_COMMAND)) {
                 taskCount = addEvent(tasks, taskCount, command);
             } else {
-                printMessage("I don't understand that command.");
+                printMessage("I don't recognise that command. " + COMMAND_HINT);
             }
             command = scanner.nextLine();
         }
         printMessage("Bye. Hope to see you again soon!");
         scanner.close();
+    }
+
+    /**
+     * Returns whether {@code command} is {@code commandWord}, with or without arguments.
+     * {@code todo} and {@code todo borrow book} both count as the todo command.
+     *
+     * @param command the full user input
+     * @param commandWord the expected first word, e.g. {@code todo}
+     * @return {@code true} if this input uses that command
+     */
+    private static boolean isCommand(String command, String commandWord) {
+        String trimmed = command.trim();
+        return trimmed.equals(commandWord) || trimmed.startsWith(commandWord + " ");
+    }
+
+    /**
+     * Returns the text after {@code commandWord}, or an empty string if there is none.
+     *
+     * @param command the full user input
+     * @param commandWord the leading word to skip
+     * @return the arguments, trimmed
+     */
+    private static String getArguments(String command, String commandWord) {
+        String trimmed = command.trim();
+        if (trimmed.equals(commandWord)) {
+            return "";
+        }
+        return trimmed.substring(commandWord.length()).trim();
     }
 
     /**
@@ -64,7 +98,11 @@ public class Aether {
      * @return the updated task count
      */
     private static int addTodo(Task[] tasks, int taskCount, String command) {
-        String description = command.substring((TODO_COMMAND + " ").length()).trim();
+        String description = getArguments(command, TODO_COMMAND);
+        if (description.isEmpty()) {
+            printMessage("The description of a todo cannot be empty. Try: todo borrow book");
+            return taskCount;
+        }
         return addTask(tasks, taskCount, new Todo(description));
     }
 
@@ -78,10 +116,22 @@ public class Aether {
      * @return the updated task count
      */
     private static int addDeadline(Task[] tasks, int taskCount, String command) {
-        String rest = command.substring((DEADLINE_COMMAND + " ").length());
+        String rest = getArguments(command, DEADLINE_COMMAND);
         int byIndex = rest.indexOf("/by");
+        if (byIndex < 0) {
+            printMessage("A deadline needs a /by date. Try: deadline return book /by Sunday");
+            return taskCount;
+        }
         String description = rest.substring(0, byIndex).trim();
         String by = rest.substring(byIndex + "/by".length()).trim();
+        if (description.isEmpty()) {
+            printMessage("The description of a deadline cannot be empty. Try: deadline return book /by Sunday");
+            return taskCount;
+        }
+        if (by.isEmpty()) {
+            printMessage("The /by date of a deadline cannot be empty. Try: deadline return book /by Sunday");
+            return taskCount;
+        }
         return addTask(tasks, taskCount, new Deadline(description, by));
     }
 
@@ -95,12 +145,35 @@ public class Aether {
      * @return the updated task count
      */
     private static int addEvent(Task[] tasks, int taskCount, String command) {
-        String rest = command.substring((EVENT_COMMAND + " ").length());
+        String rest = getArguments(command, EVENT_COMMAND);
         int fromIndex = rest.indexOf("/from");
         int toIndex = rest.indexOf("/to");
+        if (fromIndex < 0 || toIndex < 0) {
+            printMessage("An event needs /from and /to times. Try: event project meeting /from Mon 2pm /to 4pm");
+            return taskCount;
+        }
+        if (toIndex < fromIndex) {
+            printMessage("Put /from before /to. Try: event project meeting /from Mon 2pm /to 4pm");
+            return taskCount;
+        }
         String description = rest.substring(0, fromIndex).trim();
         String from = rest.substring(fromIndex + "/from".length(), toIndex).trim();
         String to = rest.substring(toIndex + "/to".length()).trim();
+        if (description.isEmpty()) {
+            printMessage("The description of an event cannot be empty. "
+                    + "Try: event project meeting /from Mon 2pm /to 4pm");
+            return taskCount;
+        }
+        if (from.isEmpty()) {
+            printMessage("The /from time of an event cannot be empty. "
+                    + "Try: event project meeting /from Mon 2pm /to 4pm");
+            return taskCount;
+        }
+        if (to.isEmpty()) {
+            printMessage("The /to time of an event cannot be empty. "
+                    + "Try: event project meeting /from Mon 2pm /to 4pm");
+            return taskCount;
+        }
         return addTask(tasks, taskCount, new Event(description, from, to));
     }
 
@@ -134,7 +207,6 @@ public class Aether {
     private static void markTask(Task[] tasks, int taskCount, String command) {
         int index = parseTaskIndex(command, MARK_COMMAND, taskCount);
         if (index < 0) {
-            printMessage("That task number does not exist.");
             return;
         }
         tasks[index].markAsDone();
@@ -151,7 +223,6 @@ public class Aether {
     private static void unmarkTask(Task[] tasks, int taskCount, String command) {
         int index = parseTaskIndex(command, UNMARK_COMMAND, taskCount);
         if (index < 0) {
-            printMessage("That task number does not exist.");
             return;
         }
         tasks[index].markAsNotDone();
@@ -160,16 +231,29 @@ public class Aether {
 
     /**
      * Reads the 1-based task number from a command such as {@code mark 2}.
+     * Prints an error and returns {@code -1} if the number is missing, not a whole number, or out of range.
      *
      * @param command the full user command
      * @param commandWord the leading word to skip, e.g. {@code mark}
      * @param taskCount how many tasks are currently stored
-     * @return the 0-based index, or {@code -1} if the number is out of range
+     * @return the 0-based index, or {@code -1} if the number cannot be used
      */
     private static int parseTaskIndex(String command, String commandWord, int taskCount) {
-        int taskNumber = Integer.parseInt(command.substring((commandWord + " ").length()).trim());
+        String arguments = getArguments(command, commandWord);
+        if (arguments.isEmpty()) {
+            printMessage("Please give a task number after " + commandWord + ". Try: " + commandWord + " 1");
+            return -1;
+        }
+        int taskNumber;
+        try {
+            taskNumber = Integer.parseInt(arguments);
+        } catch (NumberFormatException e) {
+            printMessage("The task number must be a whole number. Try: " + commandWord + " 1");
+            return -1;
+        }
         int index = taskNumber - 1;
         if (index < 0 || index >= taskCount) {
+            printMessage("That task number does not exist. Use list to see the current numbers.");
             return -1;
         }
         return index;
