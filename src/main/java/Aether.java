@@ -1,8 +1,10 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
  * Entry point for the Aether chatbot.
- * Stores todos, deadlines, and events in a {@code Task[]} (polymorphism) and can mark or unmark them as done.
+ * Stores todos, deadlines, and events in an {@code ArrayList} of {@code Task}
+ * (polymorphism) and can mark or unmark them as done.
  * Invalid input is reported with {@link AetherException}; the chatbot prints the message and keeps running.
  */
 public class Aether {
@@ -18,8 +20,6 @@ public class Aether {
     /** Commands the user can type; shown in error messages as a hint. */
     private static final String COMMAND_HINT =
             "Try: list, todo, deadline, event, mark, unmark, or bye.";
-    /** Maximum number of tasks that can be stored in memory. */
-    private static final int MAX_TASKS = 100;
 
     public static void main(String[] args) {
         String banner = "    _         _   _               \n"
@@ -30,10 +30,9 @@ public class Aether {
 
         printMessage(banner + "Hello! I'm " + NAME + ".\nWhat can I do for you?");
 
-        // Tasks stay in memory only; they are not written to disk.
+        // ArrayList grows as needed, so there is no fixed MAX_TASKS or separate count.
         // Todo, Deadline, and Event objects are stored together as Task (polymorphism).
-        Task[] tasks = new Task[MAX_TASKS];
-        int taskCount = 0;
+        ArrayList<Task> tasks = new ArrayList<>();
 
         Scanner scanner = new Scanner(System.in);
         String command = scanner.nextLine();
@@ -42,17 +41,17 @@ public class Aether {
                 if (command.trim().isEmpty()) {
                     throw new AetherException("Please type a command. " + COMMAND_HINT);
                 } else if (command.trim().equals(LIST_COMMAND)) {
-                    printMessage(formatTaskList(tasks, taskCount));
+                    printMessage(formatTaskList(tasks));
                 } else if (isCommand(command, MARK_COMMAND)) {
-                    markTask(tasks, taskCount, command);
+                    markTask(tasks, command);
                 } else if (isCommand(command, UNMARK_COMMAND)) {
-                    unmarkTask(tasks, taskCount, command);
+                    unmarkTask(tasks, command);
                 } else if (isCommand(command, TODO_COMMAND)) {
-                    taskCount = addTodo(tasks, taskCount, command);
+                    addTodo(tasks, command);
                 } else if (isCommand(command, DEADLINE_COMMAND)) {
-                    taskCount = addDeadline(tasks, taskCount, command);
+                    addDeadline(tasks, command);
                 } else if (isCommand(command, EVENT_COMMAND)) {
-                    taskCount = addEvent(tasks, taskCount, command);
+                    addEvent(tasks, command);
                 } else {
                     throw new AetherException("I don't recognise that command. " + COMMAND_HINT);
                 }
@@ -97,17 +96,15 @@ public class Aether {
      * Adds a todo from a command such as {@code todo borrow book}.
      *
      * @param tasks the stored tasks
-     * @param taskCount how many tasks are currently stored
      * @param command the full user command
-     * @return the updated task count
-     * @throws AetherException if the description is empty or the list is full
+     * @throws AetherException if the description is empty
      */
-    private static int addTodo(Task[] tasks, int taskCount, String command) throws AetherException {
+    private static void addTodo(ArrayList<Task> tasks, String command) throws AetherException {
         String description = getArguments(command, TODO_COMMAND);
         if (description.isEmpty()) {
             throw new AetherException("The description of a todo cannot be empty. Try: todo borrow book");
         }
-        return addTask(tasks, taskCount, new Todo(description));
+        addTask(tasks, new Todo(description));
     }
 
     /**
@@ -115,12 +112,10 @@ public class Aether {
      * The date/time after {@code /by} is kept as a string.
      *
      * @param tasks the stored tasks
-     * @param taskCount how many tasks are currently stored
      * @param command the full user command
-     * @return the updated task count
-     * @throws AetherException if the description or {@code /by} date is missing, or the list is full
+     * @throws AetherException if the description or {@code /by} date is missing
      */
-    private static int addDeadline(Task[] tasks, int taskCount, String command) throws AetherException {
+    private static void addDeadline(ArrayList<Task> tasks, String command) throws AetherException {
         String rest = getArguments(command, DEADLINE_COMMAND);
         int byIndex = rest.indexOf("/by");
         if (byIndex < 0) {
@@ -136,7 +131,7 @@ public class Aether {
             throw new AetherException(
                     "The /by date of a deadline cannot be empty. Try: deadline return book /by Sunday");
         }
-        return addTask(tasks, taskCount, new Deadline(description, by));
+        addTask(tasks, new Deadline(description, by));
     }
 
     /**
@@ -144,12 +139,10 @@ public class Aether {
      * The values after {@code /from} and {@code /to} are kept as strings.
      *
      * @param tasks the stored tasks
-     * @param taskCount how many tasks are currently stored
      * @param command the full user command
-     * @return the updated task count
-     * @throws AetherException if the description, {@code /from}, or {@code /to} is missing, or the list is full
+     * @throws AetherException if the description, {@code /from}, or {@code /to} is missing
      */
-    private static int addEvent(Task[] tasks, int taskCount, String command) throws AetherException {
+    private static void addEvent(ArrayList<Task> tasks, String command) throws AetherException {
         String rest = getArguments(command, EVENT_COMMAND);
         int fromIndex = rest.indexOf("/from");
         int toIndex = rest.indexOf("/to");
@@ -175,55 +168,45 @@ public class Aether {
             throw new AetherException("The /to time of an event cannot be empty. "
                     + "Try: event project meeting /from Mon 2pm /to 4pm");
         }
-        return addTask(tasks, taskCount, new Event(description, from, to));
+        addTask(tasks, new Event(description, from, to));
     }
 
     /**
-     * Stores {@code task} if there is room, and prints the add confirmation.
+     * Stores {@code task} and prints the add confirmation.
      *
      * @param tasks the stored tasks
-     * @param taskCount how many tasks are currently stored
      * @param task the task to add
-     * @return the updated task count
-     * @throws AetherException if the list already holds {@link #MAX_TASKS} tasks
      */
-    private static int addTask(Task[] tasks, int taskCount, Task task) throws AetherException {
-        if (taskCount >= MAX_TASKS) {
-            throw new AetherException("Cannot add more tasks. The list is full.");
-        }
-        tasks[taskCount] = task;
-        taskCount++;
+    private static void addTask(ArrayList<Task> tasks, Task task) {
+        tasks.add(task);
         printMessage("Got it. I've added this task:\n  " + task
-                + "\nNow you have " + taskCount + " tasks in the list.");
-        return taskCount;
+                + "\nNow you have " + tasks.size() + " tasks in the list.");
     }
 
     /**
      * Marks the task whose 1-based number is given after {@code mark} as done.
      *
      * @param tasks the stored tasks
-     * @param taskCount how many tasks are currently stored
      * @param command the full user command, e.g. {@code mark 2}
      * @throws AetherException if the task number is missing, not a whole number, or out of range
      */
-    private static void markTask(Task[] tasks, int taskCount, String command) throws AetherException {
-        int index = parseTaskIndex(command, MARK_COMMAND, taskCount);
-        tasks[index].markAsDone();
-        printMessage("Nice! I've marked this task as done:\n  " + tasks[index]);
+    private static void markTask(ArrayList<Task> tasks, String command) throws AetherException {
+        int index = parseTaskIndex(command, MARK_COMMAND, tasks.size());
+        tasks.get(index).markAsDone();
+        printMessage("Nice! I've marked this task as done:\n  " + tasks.get(index));
     }
 
     /**
      * Marks the task whose 1-based number is given after {@code unmark} as not done.
      *
      * @param tasks the stored tasks
-     * @param taskCount how many tasks are currently stored
      * @param command the full user command, e.g. {@code unmark 2}
      * @throws AetherException if the task number is missing, not a whole number, or out of range
      */
-    private static void unmarkTask(Task[] tasks, int taskCount, String command) throws AetherException {
-        int index = parseTaskIndex(command, UNMARK_COMMAND, taskCount);
-        tasks[index].markAsNotDone();
-        printMessage("OK, I've marked this task as not done yet:\n  " + tasks[index]);
+    private static void unmarkTask(ArrayList<Task> tasks, String command) throws AetherException {
+        int index = parseTaskIndex(command, UNMARK_COMMAND, tasks.size());
+        tasks.get(index).markAsNotDone();
+        printMessage("OK, I've marked this task as not done yet:\n  " + tasks.get(index));
     }
 
     /**
@@ -258,14 +241,13 @@ public class Aether {
      * Builds a numbered list of stored tasks with their type and done status.
      *
      * @param tasks the stored tasks
-     * @param taskCount how many tasks are currently stored
      * @return the formatted list, including a short header
      */
-    private static String formatTaskList(Task[] tasks, int taskCount) {
+    private static String formatTaskList(ArrayList<Task> tasks) {
         StringBuilder list = new StringBuilder("Here are the tasks in your list:");
-        for (int i = 0; i < taskCount; i++) {
+        for (int i = 0; i < tasks.size(); i++) {
             list.append('\n');
-            list.append(i + 1).append('.').append(tasks[i]);
+            list.append(i + 1).append('.').append(tasks.get(i));
         }
         return list.toString();
     }
