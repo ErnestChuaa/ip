@@ -4,7 +4,7 @@ import java.util.Scanner;
 /**
  * Entry point for the Aether chatbot.
  * Stores todos, deadlines, and events in an {@code ArrayList} of {@code Task}
- * (polymorphism) and can mark or unmark them as done.
+ * (polymorphism) and can mark, unmark, or delete them.
  * Invalid input is reported with {@link AetherException}; the chatbot prints the message and keeps running.
  */
 public class Aether {
@@ -14,12 +14,13 @@ public class Aether {
     private static final String LIST_COMMAND = "list";
     private static final String MARK_COMMAND = "mark";
     private static final String UNMARK_COMMAND = "unmark";
+    private static final String DELETE_COMMAND = "delete";
     private static final String TODO_COMMAND = "todo";
     private static final String DEADLINE_COMMAND = "deadline";
     private static final String EVENT_COMMAND = "event";
     /** Commands the user can type; shown in error messages as a hint. */
     private static final String COMMAND_HINT =
-            "Try: list, todo, deadline, event, mark, unmark, or bye.";
+            "Try: list, todo, deadline, event, mark, unmark, delete, or bye.";
 
     public static void main(String[] args) {
         String banner = "    _         _   _               \n"
@@ -46,6 +47,8 @@ public class Aether {
                     markTask(tasks, command);
                 } else if (isCommand(command, UNMARK_COMMAND)) {
                     unmarkTask(tasks, command);
+                } else if (isCommand(command, DELETE_COMMAND)) {
+                    deleteTask(tasks, command);
                 } else if (isCommand(command, TODO_COMMAND)) {
                     addTodo(tasks, command);
                 } else if (isCommand(command, DEADLINE_COMMAND)) {
@@ -207,6 +210,21 @@ public class Aether {
         int index = parseTaskIndex(command, UNMARK_COMMAND, tasks.size());
         tasks.get(index).markAsNotDone();
         printMessage("OK, I've marked this task as not done yet:\n  " + tasks.get(index));
+    }
+
+    /**
+     * Removes the task whose 1-based number is given after {@code delete}.
+     * Later tasks shift down, so their list numbers change.
+     *
+     * @param tasks the stored tasks
+     * @param command the full user command, e.g. {@code delete 3}
+     * @throws AetherException if the task number is missing, not a whole number, or out of range
+     */
+    private static void deleteTask(ArrayList<Task> tasks, String command) throws AetherException {
+        int index = parseTaskIndex(command, DELETE_COMMAND, tasks.size());
+        Task removed = tasks.remove(index);
+        printMessage("Noted. I've removed this task:\n  " + removed
+                + "\nNow you have " + tasks.size() + " tasks in the list.");
     }
 
     /**
