@@ -33,3 +33,10 @@ Ensure that Java 25 is used when running the application or build tasks. This pr
 Use lightweight tags unless the user requests an annotated tag.
 When proposing or creating a commit message, include enough detail to explain the rationale for the change.
 Do not commit or push unless explicitly asked.
+
+## UI testing
+
+After each code update that can change chatbot behaviour:
+
+1. Update `test/ui-test-plan.md` if needed (new commands, changed wording, or extra coverage).
+2. Invoke the `test-ui` skill (`.cursor/skills/test-ui/SKILL.md`) to run the plan and report the console session.
