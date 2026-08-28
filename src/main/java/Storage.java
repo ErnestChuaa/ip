@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -96,11 +98,12 @@ public class Storage {
                 break;
             case "D":
                 requireFieldCount(fields, 4);
-                task = new Deadline(decode(fields[2]), decode(fields[3]));
+                task = new Deadline(decode(fields[2]), LocalDate.parse(decode(fields[3])));
                 break;
             case "E":
                 requireFieldCount(fields, 5);
-                task = new Event(decode(fields[2]), decode(fields[3]), decode(fields[4]));
+                task = new Event(decode(fields[2]), LocalDate.parse(decode(fields[3])),
+                        LocalDate.parse(decode(fields[4])));
                 break;
             default:
                 throw new IllegalArgumentException();
@@ -111,7 +114,7 @@ public class Storage {
                 throw new IllegalArgumentException();
             }
             return task;
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | DateTimeParseException e) {
             throw new AetherException("Saved task data is corrupted at line " + lineNumber
                     + ". Repair or remove data/aether.txt, then restart Aether.");
         }
@@ -133,11 +136,11 @@ public class Storage {
         if (task instanceof Deadline) {
             Deadline deadline = (Deadline) task;
             return "D" + SEPARATOR + done + SEPARATOR + encode(task.description)
-                    + SEPARATOR + encode(deadline.by);
+                    + SEPARATOR + encode(deadline.by.toString());
         }
         Event event = (Event) task;
         return "E" + SEPARATOR + done + SEPARATOR + encode(task.description)
-                + SEPARATOR + encode(event.from) + SEPARATOR + encode(event.to);
+                + SEPARATOR + encode(event.from.toString()) + SEPARATOR + encode(event.to.toString());
     }
 
     /** Encodes user-provided text so separators and line breaks cannot corrupt the file format. */

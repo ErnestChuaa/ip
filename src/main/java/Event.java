@@ -1,18 +1,23 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
 /**
- * A task that starts at one date/time and ends at another, both kept as strings.
+ * A task that starts on one date and ends on another date.
  */
 public class Event extends Task {
-    protected String from;
-    protected String to;
+    private static final DateTimeFormatter DISPLAY_FORMAT = DateTimeFormatter.ofPattern("MMM dd uuuu", Locale.ENGLISH);
+    protected LocalDate from;
+    protected LocalDate to;
 
     /**
      * Creates an event that starts as not done.
      *
      * @param description what the event is
-     * @param from when the event starts
-     * @param to when the event ends
+     * @param from the date when the event starts
+     * @param to the date when the event ends
      */
-    public Event(String description, String from, String to) {
+    public Event(String description, LocalDate from, LocalDate to) {
         super(description, TaskType.EVENT);
         this.from = from;
         this.to = to;
@@ -20,12 +25,13 @@ public class Event extends Task {
 
     /**
      * Returns this event in list form, for example
-     * {@code [E][ ] project meeting (from: Mon 2pm to: 4pm)}.
+     * {@code [E][ ] project meeting (from: Oct 15 2019 to: Oct 16 2019)}.
      *
-     * @return the type icon, shared task text, and start/end times
+     * @return the type icon, shared task text, and start/end dates
      */
     @Override
     public String toString() {
-        return "[" + type.getIcon() + "]" + super.toString() + " (from: " + from + " to: " + to + ")";
+        return "[" + type.getIcon() + "]" + super.toString()
+                + " (from: " + from.format(DISPLAY_FORMAT) + " to: " + to.format(DISPLAY_FORMAT) + ")";
     }
 }

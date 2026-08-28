@@ -2,6 +2,22 @@
 
 Aether is a personal chatbot project, renamed from the Duke starter template. Given below are instructions on how to use it.
 
+## Commands
+
+Dates in `deadline` and `event` commands use the ISO-8601 `yyyy-MM-dd` format.
+For example, `deadline return book /by 2019-10-15` is shown as `Oct 15 2019`.
+
+```
+todo DESCRIPTION
+deadline DESCRIPTION /by yyyy-MM-dd
+event DESCRIPTION /from yyyy-MM-dd /to yyyy-MM-dd
+list
+mark TASK_NUMBER
+unmark TASK_NUMBER
+delete TASK_NUMBER
+bye
+```
+
 ## Setting up in Intellij
 
 Prerequisites: JDK 25, update Intellij to the most recent version.
