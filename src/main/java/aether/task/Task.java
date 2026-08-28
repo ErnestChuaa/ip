@@ -1,7 +1,7 @@
 package aether.task;
 
 /**
- * Shared fields and behaviour for every task type.
+ * Shared fields and behavior for every task type.
  * Subclasses add a type icon and any date/time details via {@link #toString()}.
  */
 public class Task {

@@ -63,25 +63,27 @@ public class Aether {
     /** Executes one validated, non-exit command. */
     private void processCommand(Command command) throws AetherException {
         switch (command.getType()) {
-        case LIST:
-            ui.showTaskList(tasks.formatTaskList());
-            break;
-        case TODO:
-        case DEADLINE:
-        case EVENT:
-            addTask(parser.createTask(command));
-            break;
-        case MARK:
-            markTask(command);
-            break;
-        case UNMARK:
-            unmarkTask(command);
-            break;
-        case DELETE:
-            deleteTask(command);
-            break;
-        default:
-            throw new IllegalStateException("Unexpected command type: " + command.getType());
+            case LIST:
+                ui.showTaskList(tasks.formatTaskList());
+                break;
+            case TODO:
+                // Fallthrough
+            case DEADLINE:
+                // Fallthrough
+            case EVENT:
+                addTask(parser.createTask(command));
+                break;
+            case MARK:
+                markTask(command);
+                break;
+            case UNMARK:
+                unmarkTask(command);
+                break;
+            case DELETE:
+                deleteTask(command);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected command type: " + command.getType());
         }
     }
 
