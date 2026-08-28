@@ -1,4 +1,4 @@
-package aether;
+package aether.task;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -23,6 +23,16 @@ public class Event extends Task {
         super(description, TaskType.EVENT);
         this.from = from;
         this.to = to;
+    }
+
+    /** Returns the date on which this event starts. */
+    public LocalDate getFrom() {
+        return from;
+    }
+
+    /** Returns the date on which this event ends. */
+    public LocalDate getTo() {
+        return to;
     }
 
     /**

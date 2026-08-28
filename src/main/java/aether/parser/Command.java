@@ -1,4 +1,4 @@
-package aether;
+package aether.parser;
 
 /** Holds a command type and the arguments typed after its command word. */
 public class Command {

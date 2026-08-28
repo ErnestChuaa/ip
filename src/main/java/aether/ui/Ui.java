@@ -1,6 +1,8 @@
-package aether;
+package aether.ui;
 
 import java.util.Scanner;
+
+import aether.task.Task;
 
 /** Handles all text displayed to the user and reads commands from the console. */
 public class Ui {

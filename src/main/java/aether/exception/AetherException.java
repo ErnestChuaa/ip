@@ -1,4 +1,4 @@
-package aether;
+package aether.exception;
 
 /**
  * A user-facing error, such as an unknown command or a missing task description.

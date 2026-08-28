@@ -49,7 +49,9 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
 From the project root, compile the Java files into the `out` directory:
 
 ```powershell
-javac -d out src\main\java\aether\*.java
+$aetherSourceFiles = Get-ChildItem -Recurse src\main\java -Filter *.java |
+    ForEach-Object { $_.FullName }
+javac -d out $aetherSourceFiles
 ```
 
 Run Aether using the compiled files in `out`:

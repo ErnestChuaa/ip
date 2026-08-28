@@ -2,6 +2,16 @@ package aether;
 
 import java.nio.file.Path;
 
+import aether.exception.AetherException;
+import aether.parser.Command;
+import aether.parser.CommandType;
+import aether.parser.Parser;
+import aether.storage.Storage;
+import aether.task.Task;
+import aether.task.TaskList;
+import aether.task.TaskStatus;
+import aether.ui.Ui;
+
 /**
  * Coordinates the chatbot's user interface, command parsing, task list, and persistent storage.
  */

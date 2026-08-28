@@ -1,4 +1,4 @@
-package aether;
+package aether.task;
 
 /**
  * Represents whether a task has been completed.

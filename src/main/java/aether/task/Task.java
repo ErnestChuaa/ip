@@ -1,4 +1,4 @@
-package aether;
+package aether.task;
 
 /**
  * Shared fields and behaviour for every task type.
@@ -56,6 +56,11 @@ public class Task {
     /** Returns whether this task is pending or completed. */
     public TaskStatus getStatus() {
         return status;
+    }
+
+    /** Returns the user-provided description of this task. */
+    public String getDescription() {
+        return description;
     }
 
     /** Restores this task's status, for example after an unsuccessful save. */

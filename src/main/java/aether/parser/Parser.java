@@ -1,7 +1,13 @@
-package aether;
+package aether.parser;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+
+import aether.exception.AetherException;
+import aether.task.Deadline;
+import aether.task.Event;
+import aether.task.Task;
+import aether.task.Todo;
 
 /** Converts raw user input into validated commands, tasks, and task indexes. */
 public class Parser {

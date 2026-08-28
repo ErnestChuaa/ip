@@ -11,7 +11,7 @@ import sys
 
 LINE = "____________________________________________________________"
 PLAN_PATH = os.path.join("test", "ui-test-plan.md")
-SRC_GLOB = os.path.join("src", "main", "java", "aether", "*.java")
+SRC_GLOB = os.path.join("src", "main", "java", "**", "*.java")
 
 
 def repo_root():
@@ -77,9 +77,9 @@ def compile_sources(root):
     out_dir = os.path.join(root, "out")
     if not os.path.isdir(out_dir):
         os.makedirs(out_dir)
-    java_files = glob(os.path.join(root, "src", "main", "java", "aether", "*.java"))
+    java_files = glob(os.path.join(root, SRC_GLOB), recursive=True)
     if not java_files:
-        raise SystemExit("No Java sources found under src/main/java/aether")
+        raise SystemExit("No Java sources found under src/main/java")
     command = ["javac", "-d", out_dir] + java_files
     print("Compiling:", " ".join(command))
     result = subprocess.Popen(

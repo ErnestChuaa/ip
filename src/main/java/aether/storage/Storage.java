@@ -1,4 +1,4 @@
-package aether;
+package aether.storage;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -9,6 +9,13 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+
+import aether.exception.AetherException;
+import aether.task.Deadline;
+import aether.task.Event;
+import aether.task.Task;
+import aether.task.TaskStatus;
+import aether.task.Todo;
 
 /**
  * Reads and writes Aether tasks in a file relative to the project directory.
@@ -131,18 +138,18 @@ public class Storage {
 
     /** Returns the saved representation of a task. */
     private String formatTask(Task task) {
-        String done = task.status == TaskStatus.COMPLETED ? "1" : "0";
+        String done = task.getStatus() == TaskStatus.COMPLETED ? "1" : "0";
         if (task instanceof Todo) {
-            return "T" + SEPARATOR + done + SEPARATOR + encode(task.description);
+            return "T" + SEPARATOR + done + SEPARATOR + encode(task.getDescription());
         }
         if (task instanceof Deadline) {
             Deadline deadline = (Deadline) task;
-            return "D" + SEPARATOR + done + SEPARATOR + encode(task.description)
-                    + SEPARATOR + encode(deadline.by.toString());
+            return "D" + SEPARATOR + done + SEPARATOR + encode(task.getDescription())
+                    + SEPARATOR + encode(deadline.getBy().toString());
         }
         Event event = (Event) task;
-        return "E" + SEPARATOR + done + SEPARATOR + encode(task.description)
-                + SEPARATOR + encode(event.from.toString()) + SEPARATOR + encode(event.to.toString());
+        return "E" + SEPARATOR + done + SEPARATOR + encode(task.getDescription())
+                + SEPARATOR + encode(event.getFrom().toString()) + SEPARATOR + encode(event.getTo().toString());
     }
 
     /** Encodes user-provided text so separators and line breaks cannot corrupt the file format. */

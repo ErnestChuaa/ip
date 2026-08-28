@@ -1,4 +1,4 @@
-package aether;
+package aether.task;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -20,6 +20,11 @@ public class Deadline extends Task {
     public Deadline(String description, LocalDate by) {
         super(description, TaskType.DEADLINE);
         this.by = by;
+    }
+
+    /** Returns the date by which this task must be completed. */
+    public LocalDate getBy() {
+        return by;
     }
 
     /**

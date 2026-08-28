@@ -1,4 +1,4 @@
-package aether;
+package aether.task;
 
 /**
  * A task with no date or time attached, for example {@code visit new theme park}.

@@ -1,4 +1,4 @@
-package aether;
+package aether.parser;
 
 /** Represents the commands that Aether understands. */
 public enum CommandType {
