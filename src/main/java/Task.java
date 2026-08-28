@@ -4,7 +4,8 @@
  */
 public class Task {
     protected String description;
-    protected boolean isDone;
+    protected TaskStatus status;
+    protected TaskType type;
 
     /**
      * Creates a task that starts as not done.
@@ -12,8 +13,19 @@ public class Task {
      * @param description what the user needs to do
      */
     public Task(String description) {
+        this(description, TaskType.TODO);
+    }
+
+    /**
+     * Creates a task of the specified type that starts as not done.
+     *
+     * @param description what the user needs to do
+     * @param type the kind of task
+     */
+    public Task(String description, TaskType type) {
         this.description = description;
-        this.isDone = false;
+        this.status = TaskStatus.PENDING;
+        this.type = type;
     }
 
     /**
@@ -22,21 +34,21 @@ public class Task {
      * @return the character shown inside the task's checkbox
      */
     public String getStatusIcon() {
-        return (isDone ? "X" : " ");
+        return (status == TaskStatus.COMPLETED ? "X" : " ");
     }
 
     /**
      * Records this task as completed.
      */
     public void markAsDone() {
-        isDone = true;
+        status = TaskStatus.COMPLETED;
     }
 
     /**
      * Records this task as not yet completed.
      */
     public void markAsNotDone() {
-        isDone = false;
+        status = TaskStatus.PENDING;
     }
 
     /**

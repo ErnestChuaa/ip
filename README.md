@@ -28,4 +28,18 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
    ____________________________________________________________
    ```
 
+## Compiling and running from the terminal
+
+From the project root, compile the Java files into the `out` directory:
+
+```powershell
+javac -d out src\main\java\*.java
+```
+
+Run Aether using the compiled files in `out`:
+
+```powershell
+java -cp out Aether
+```
+
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
