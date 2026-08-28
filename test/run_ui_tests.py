@@ -111,6 +111,13 @@ def run_session(root, inputs):
     return commands, normalize(stdout)
 
 
+def reset_saved_tasks(root):
+    """Remove the test data file so every independent UI case starts empty."""
+    data_file = os.path.join(root, "data", "aether.txt")
+    if os.path.isfile(data_file):
+        os.remove(data_file)
+
+
 def format_session(commands, actual):
     messages = split_messages(actual)
     record = []
@@ -155,6 +162,7 @@ def main():
         print("=" * 60)
         print("Test case: " + case["name"])
         print("Aim: " + case["aim"])
+        reset_saved_tasks(root)
         commands, actual = run_session(root, case["inputs"])
         expected = case["expected"]
         session_record = format_session(commands, actual)
