@@ -1,6 +1,6 @@
 # UI Test Plan
 
-Console UI tests for Aether. After each code update that changes chatbot behaviour, update this file if needed and run the `test-ui` skill.
+Console UI tests for Aether. After each code update that changes chatbot behaviour, update this file if needed and run `python test/run_ui_tests.py` from the repository root.
 
 Dates and times are treated as plain strings.
 

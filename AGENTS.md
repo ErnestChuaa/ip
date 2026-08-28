@@ -39,7 +39,7 @@ Do not commit or push unless explicitly asked.
 After each code update that can change chatbot behaviour:
 
 1. Update `test/ui-test-plan.md` if needed (new commands, changed wording, or extra coverage).
-2. Invoke the `test-ui` skill (`.cursor/skills/test-ui/SKILL.md`) to run the plan and report the console session.
+2. Run `python test/run_ui_tests.py` to execute the plan and report the console session.
 
 Include tests for incorrect input (empty descriptions, unknown commands, missing `/by` `/from` `/to`, invalid task numbers). Interleave valid and invalid commands so a rejected input cannot still change the task list.
 

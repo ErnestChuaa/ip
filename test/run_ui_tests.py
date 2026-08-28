@@ -15,9 +15,9 @@ SRC_GLOB = os.path.join("src", "main", "java", "*.java")
 
 
 def repo_root():
-    scripts_dir = os.path.dirname(os.path.abspath(__file__))
-    # .cursor/skills/test-ui/scripts -> repo root is four levels up
-    return os.path.abspath(os.path.join(scripts_dir, "..", "..", "..", ".."))
+    test_dir = os.path.dirname(os.path.abspath(__file__))
+    # test/run_ui_tests.py -> repository root is one level up
+    return os.path.abspath(os.path.join(test_dir, ".."))
 
 
 def normalize(text):
