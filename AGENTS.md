@@ -34,6 +34,33 @@ Use lightweight tags unless the user requests an annotated tag.
 When proposing or creating a commit message, include enough detail to explain the rationale for the change.
 Do not commit or push unless explicitly asked.
 
+## Java coding conventions
+
+Follow the [SE-EDU Java coding standard](https://se-education.org/guides/conventions/java/intermediate.html).
+
+At minimum:
+
+* Use 4 spaces, K&R-style braces, and a maximum line length of 120 characters.
+* Use PascalCase for classes, camelCase for methods and variables, and
+  SCREAMING_SNAKE_CASE for constants.
+* Put every class in a package and avoid wildcard imports.
+* Use braces for all loops and conditional statements.
+* Add Javadoc to all public classes and public methods, except getters, setters,
+  overrides, and test code.
+* Add comments or Javadoc for non-obvious fields and logic.
+
+## Git commit conventions
+
+Follow the [SE-EDU Git conventions](https://se-education.org/guides/conventions/git.html).
+
+When proposing a commit message:
+
+* Use the imperative mood, such as `Add command validation` rather than
+  `Added command validation`.
+* Capitalize the first word and do not end the subject with a period.
+* Keep the subject under 72 characters and aim for 50 characters.
+* For non-trivial changes, include a body explaining what changed and why.
+
 ## UI testing
 
 After each code update that can change chatbot behaviour:
