@@ -29,9 +29,18 @@ class ParserTest {
     @Test
     void parseRejectsEmptyUnknownAndUnexpectedArguments() {
         assertError("   ", "Please type a command");
+        assertError("find", "search keyword cannot be empty");
         assertError("remind buy milk", "I don't recognise that command");
         assertError("list today", "I don't recognise that command");
         assertError("bye now", "I don't recognise that command");
+    }
+
+    @Test
+    void parseFindKeepsTheSearchKeyword() throws AetherException {
+        Command command = parser.parse("  find   BOOK  ");
+
+        assertEquals(CommandType.FIND, command.getType());
+        assertEquals("BOOK", command.getArguments());
     }
 
     @Test

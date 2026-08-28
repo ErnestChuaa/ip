@@ -2,6 +2,7 @@ package aether.task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /** Owns the ordered collection of tasks and operations performed on that collection. */
 public class TaskList {
@@ -82,5 +83,26 @@ public class TaskList {
             list.append('\n').append(index + 1).append('.').append(tasks.get(index));
         }
         return list.toString();
+    }
+
+    /**
+     * Returns tasks whose descriptions contain the keyword, numbered in matching order.
+     * Matching ignores letter case so that, for example, {@code find BOOK} finds {@code read book}.
+     *
+     * @param keyword the text to search for in task descriptions
+     * @return the numbered matching tasks in the form shown to the user
+     */
+    public String formatMatchingTasks(String keyword) {
+        String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
+        StringBuilder matches = new StringBuilder("Here are the matching tasks in your list:");
+        int matchNumber = 1;
+        for (Task task : tasks) {
+            String normalizedDescription = task.getDescription().toLowerCase(Locale.ROOT);
+            if (normalizedDescription.contains(normalizedKeyword)) {
+                matches.append('\n').append(matchNumber).append('.').append(task);
+                matchNumber++;
+            }
+        }
+        return matches.toString();
     }
 }
