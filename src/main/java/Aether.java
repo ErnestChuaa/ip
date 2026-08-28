@@ -1,4 +1,6 @@
 import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -114,8 +116,7 @@ public class Aether {
     }
 
     /**
-     * Adds a deadline from a command such as {@code deadline return book /by Sunday}.
-     * The date/time after {@code /by} is kept as a string.
+     * Adds a deadline from a command such as {@code deadline return book /by 2019-10-15}.
      *
      * @param tasks the stored tasks
      * @param command the full user command
@@ -125,24 +126,24 @@ public class Aether {
         String rest = getArguments(command, DEADLINE_COMMAND);
         int byIndex = rest.indexOf("/by");
         if (byIndex < 0) {
-            throw new AetherException("A deadline needs a /by date. Try: deadline return book /by Sunday");
+            throw new AetherException("A deadline needs a /by date. Try: deadline return book /by 2019-10-15");
         }
         String description = rest.substring(0, byIndex).trim();
         String by = rest.substring(byIndex + "/by".length()).trim();
         if (description.isEmpty()) {
             throw new AetherException(
-                    "The description of a deadline cannot be empty. Try: deadline return book /by Sunday");
+                    "The description of a deadline cannot be empty. Try: deadline return book /by 2019-10-15");
         }
         if (by.isEmpty()) {
             throw new AetherException(
-                    "The /by date of a deadline cannot be empty. Try: deadline return book /by Sunday");
+                    "The /by date of a deadline cannot be empty. Try: deadline return book /by 2019-10-15");
         }
-        addTask(tasks, new Deadline(description, by));
+        addTask(tasks, new Deadline(description, parseDate(by, "/by date", "deadline return book /by 2019-10-15")));
     }
 
     /**
-     * Adds an event from a command such as {@code event project meeting /from Mon 2pm /to 4pm}.
-     * The values after {@code /from} and {@code /to} are kept as strings.
+     * Adds an event from a command such as
+     * {@code event project meeting /from 2019-10-15 /to 2019-10-16}.
      *
      * @param tasks the stored tasks
      * @param command the full user command
@@ -154,27 +155,50 @@ public class Aether {
         int toIndex = rest.indexOf("/to");
         if (fromIndex < 0 || toIndex < 0) {
             throw new AetherException(
-                    "An event needs /from and /to times. Try: event project meeting /from Mon 2pm /to 4pm");
+                    "An event needs /from and /to dates. Try: event project meeting /from 2019-10-15 /to 2019-10-16");
         }
         if (toIndex < fromIndex) {
-            throw new AetherException("Put /from before /to. Try: event project meeting /from Mon 2pm /to 4pm");
+            throw new AetherException(
+                    "Put /from before /to. Try: event project meeting /from 2019-10-15 /to 2019-10-16");
         }
         String description = rest.substring(0, fromIndex).trim();
         String from = rest.substring(fromIndex + "/from".length(), toIndex).trim();
         String to = rest.substring(toIndex + "/to".length()).trim();
         if (description.isEmpty()) {
             throw new AetherException("The description of an event cannot be empty. "
-                    + "Try: event project meeting /from Mon 2pm /to 4pm");
+                    + "Try: event project meeting /from 2019-10-15 /to 2019-10-16");
         }
         if (from.isEmpty()) {
-            throw new AetherException("The /from time of an event cannot be empty. "
-                    + "Try: event project meeting /from Mon 2pm /to 4pm");
+            throw new AetherException("The /from date of an event cannot be empty. "
+                    + "Try: event project meeting /from 2019-10-15 /to 2019-10-16");
         }
         if (to.isEmpty()) {
-            throw new AetherException("The /to time of an event cannot be empty. "
-                    + "Try: event project meeting /from Mon 2pm /to 4pm");
+            throw new AetherException("The /to date of an event cannot be empty. "
+                    + "Try: event project meeting /from 2019-10-15 /to 2019-10-16");
         }
-        addTask(tasks, new Event(description, from, to));
+        LocalDate startDate = parseDate(from, "/from date",
+                "event project meeting /from 2019-10-15 /to 2019-10-16");
+        LocalDate endDate = parseDate(to, "/to date",
+                "event project meeting /from 2019-10-15 /to 2019-10-16");
+        addTask(tasks, new Event(description, startDate, endDate));
+    }
+
+    /**
+     * Parses a date in the unambiguous ISO-8601 format required by Aether commands.
+     *
+     * @param dateText the date entered by the user
+     * @param fieldName the command field being parsed, for example {@code /by date}
+     * @param example a complete valid command to show if parsing fails
+     * @return the parsed date
+     * @throws AetherException if the date is not in {@code yyyy-MM-dd} format or is not a real date
+     */
+    private static LocalDate parseDate(String dateText, String fieldName, String example) throws AetherException {
+        try {
+            return LocalDate.parse(dateText);
+        } catch (DateTimeParseException e) {
+            throw new AetherException("The " + fieldName + " must be a valid date in yyyy-MM-dd format. Try: "
+                    + example);
+        }
     }
 
     /**

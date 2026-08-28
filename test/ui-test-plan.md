@@ -1,8 +1,8 @@
-# UI Test Plan
+﻿# UI Test Plan
 
 Console UI tests for Aether. After each code update that changes chatbot behaviour, update this file if needed and run `python test/run_ui_tests.py` from the repository root.
 
-Dates and times are treated as plain strings.
+Dates are parsed as `LocalDate` values in the `yyyy-MM-dd` format and displayed as `MMM dd yyyy`.
 
 The test runner deletes `data/aether.txt` before each independent UI case, so saved
 tasks cannot affect another case. Persistence is checked separately by running one
@@ -47,11 +47,11 @@ ____________________________________________________________
 
 ## Test case: add a deadline
 
-**Aim:** A `deadline` command stores a task with type `D` and the `/by` value shown as a string.
+**Aim:** A `deadline` command stores a task with type `D`, parses its `/by` date, and displays it readably.
 
 **Inputs:**
 ```
-deadline return book /by Sunday
+deadline return book /by 2019-10-15
 list
 bye
 ```
@@ -69,12 +69,12 @@ What can I do for you?
 ____________________________________________________________
 ____________________________________________________________
 Got it. I've added this task:
-  [D][ ] return book (by: Sunday)
+  [D][ ] return book (by: Oct 15 2019)
 Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
 Here are the tasks in your list:
-1.[D][ ] return book (by: Sunday)
+1.[D][ ] return book (by: Oct 15 2019)
 ____________________________________________________________
 ____________________________________________________________
 Bye. Hope to see you again soon!
@@ -83,11 +83,11 @@ ____________________________________________________________
 
 ## Test case: add an event
 
-**Aim:** An `event` command stores a task with type `E` and the `/from` and `/to` values shown as strings.
+**Aim:** An `event` command stores a task with type `E`, parses its `/from` and `/to` dates, and displays them readably.
 
 **Inputs:**
 ```
-event project meeting /from Mon 2pm /to 4pm
+event project meeting /from 2019-10-15 /to 2019-10-16
 list
 bye
 ```
@@ -105,12 +105,12 @@ What can I do for you?
 ____________________________________________________________
 ____________________________________________________________
 Got it. I've added this task:
-  [E][ ] project meeting (from: Mon 2pm to: 4pm)
+  [E][ ] project meeting (from: Oct 15 2019 to: Oct 16 2019)
 Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
 Here are the tasks in your list:
-1.[E][ ] project meeting (from: Mon 2pm to: 4pm)
+1.[E][ ] project meeting (from: Oct 15 2019 to: Oct 16 2019)
 ____________________________________________________________
 ____________________________________________________________
 Bye. Hope to see you again soon!
@@ -124,16 +124,16 @@ ____________________________________________________________
 **Inputs:**
 ```
 todo read book
-deadline return book /by June 6th
-event project meeting /from Aug 6th 2pm /to 4pm
+deadline return book /by 2019-06-06
+event project meeting /from 2019-08-06 /to 2019-08-07
 todo join sports club
 todo borrow book
 mark 1
 mark 4
 list
-deadline return book /by Sunday
-event project meeting /from Mon 2pm /to 4pm
-deadline do homework /by no idea :-p
+deadline return book /by 2019-10-15
+event project meeting /from 2019-10-15 /to 2019-10-16
+deadline do homework /by 2020-01-20
 list
 bye
 ```
@@ -156,12 +156,12 @@ Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
 Got it. I've added this task:
-  [D][ ] return book (by: June 6th)
+  [D][ ] return book (by: Jun 06 2019)
 Now you have 2 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
 Got it. I've added this task:
-  [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+  [E][ ] project meeting (from: Aug 06 2019 to: Aug 07 2019)
 Now you have 3 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
@@ -185,36 +185,36 @@ ____________________________________________________________
 ____________________________________________________________
 Here are the tasks in your list:
 1.[T][X] read book
-2.[D][ ] return book (by: June 6th)
-3.[E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+2.[D][ ] return book (by: Jun 06 2019)
+3.[E][ ] project meeting (from: Aug 06 2019 to: Aug 07 2019)
 4.[T][X] join sports club
 5.[T][ ] borrow book
 ____________________________________________________________
 ____________________________________________________________
 Got it. I've added this task:
-  [D][ ] return book (by: Sunday)
+  [D][ ] return book (by: Oct 15 2019)
 Now you have 6 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
 Got it. I've added this task:
-  [E][ ] project meeting (from: Mon 2pm to: 4pm)
+  [E][ ] project meeting (from: Oct 15 2019 to: Oct 16 2019)
 Now you have 7 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
 Got it. I've added this task:
-  [D][ ] do homework (by: no idea :-p)
+  [D][ ] do homework (by: Jan 20 2020)
 Now you have 8 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
 Here are the tasks in your list:
 1.[T][X] read book
-2.[D][ ] return book (by: June 6th)
-3.[E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+2.[D][ ] return book (by: Jun 06 2019)
+3.[E][ ] project meeting (from: Aug 06 2019 to: Aug 07 2019)
 4.[T][X] join sports club
 5.[T][ ] borrow book
-6.[D][ ] return book (by: Sunday)
-7.[E][ ] project meeting (from: Mon 2pm to: 4pm)
-8.[D][ ] do homework (by: no idea :-p)
+6.[D][ ] return book (by: Oct 15 2019)
+7.[E][ ] project meeting (from: Oct 15 2019 to: Oct 16 2019)
+8.[D][ ] do homework (by: Jan 20 2020)
 ____________________________________________________________
 ____________________________________________________________
 Bye. Hope to see you again soon!
@@ -227,7 +227,7 @@ ____________________________________________________________
 
 **Inputs:**
 ```
-deadline return book /by Sunday
+deadline return book /by 2019-10-15
 mark 1
 unmark 1
 list
@@ -247,20 +247,20 @@ What can I do for you?
 ____________________________________________________________
 ____________________________________________________________
 Got it. I've added this task:
-  [D][ ] return book (by: Sunday)
+  [D][ ] return book (by: Oct 15 2019)
 Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
 Nice! I've marked this task as done:
-  [D][X] return book (by: Sunday)
+  [D][X] return book (by: Oct 15 2019)
 ____________________________________________________________
 ____________________________________________________________
 OK, I've marked this task as not done yet:
-  [D][ ] return book (by: Sunday)
+  [D][ ] return book (by: Oct 15 2019)
 ____________________________________________________________
 ____________________________________________________________
 Here are the tasks in your list:
-1.[D][ ] return book (by: Sunday)
+1.[D][ ] return book (by: Oct 15 2019)
 ____________________________________________________________
 ____________________________________________________________
 Bye. Hope to see you again soon!
@@ -313,10 +313,10 @@ ____________________________________________________________
 todo read book
 todo
 deadline return book
-event project meeting /from Mon 2pm
+event project meeting /from 2019-10-15
 mark abc
 list
-deadline return book /by Sunday
+deadline return book /by 2019-10-15
 mark 2
 mark 1
 list
@@ -343,10 +343,10 @@ ____________________________________________________________
 The description of a todo cannot be empty. Try: todo borrow book
 ____________________________________________________________
 ____________________________________________________________
-A deadline needs a /by date. Try: deadline return book /by Sunday
+A deadline needs a /by date. Try: deadline return book /by 2019-10-15
 ____________________________________________________________
 ____________________________________________________________
-An event needs /from and /to times. Try: event project meeting /from Mon 2pm /to 4pm
+An event needs /from and /to dates. Try: event project meeting /from 2019-10-15 /to 2019-10-16
 ____________________________________________________________
 ____________________________________________________________
 The task number must be a whole number. Try: mark 1
@@ -357,12 +357,12 @@ Here are the tasks in your list:
 ____________________________________________________________
 ____________________________________________________________
 Got it. I've added this task:
-  [D][ ] return book (by: Sunday)
+  [D][ ] return book (by: Oct 15 2019)
 Now you have 2 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
 Nice! I've marked this task as done:
-  [D][X] return book (by: Sunday)
+  [D][X] return book (by: Oct 15 2019)
 ____________________________________________________________
 ____________________________________________________________
 Nice! I've marked this task as done:
@@ -371,7 +371,7 @@ ____________________________________________________________
 ____________________________________________________________
 Here are the tasks in your list:
 1.[T][X] read book
-2.[D][X] return book (by: Sunday)
+2.[D][X] return book (by: Oct 15 2019)
 ____________________________________________________________
 ____________________________________________________________
 Bye. Hope to see you again soon!
@@ -384,11 +384,11 @@ ____________________________________________________________
 
 **Inputs:**
 ```
-deadline /by Sunday
+deadline /by 2019-10-15
 deadline return book /by
-event /from Mon 2pm /to 4pm
-event project meeting /from /to 4pm
-event project meeting /from Mon 2pm /to
+event /from 2019-10-15 /to 2019-10-16
+event project meeting /from /to 2019-10-16
+event project meeting /from 2019-10-15 /to
 mark
 unmark 1
 list
@@ -407,25 +407,66 @@ Hello! I'm Aether.
 What can I do for you?
 ____________________________________________________________
 ____________________________________________________________
-The description of a deadline cannot be empty. Try: deadline return book /by Sunday
+The description of a deadline cannot be empty. Try: deadline return book /by 2019-10-15
 ____________________________________________________________
 ____________________________________________________________
-The /by date of a deadline cannot be empty. Try: deadline return book /by Sunday
+The /by date of a deadline cannot be empty. Try: deadline return book /by 2019-10-15
 ____________________________________________________________
 ____________________________________________________________
-The description of an event cannot be empty. Try: event project meeting /from Mon 2pm /to 4pm
+The description of an event cannot be empty. Try: event project meeting /from 2019-10-15 /to 2019-10-16
 ____________________________________________________________
 ____________________________________________________________
-The /from time of an event cannot be empty. Try: event project meeting /from Mon 2pm /to 4pm
+The /from date of an event cannot be empty. Try: event project meeting /from 2019-10-15 /to 2019-10-16
 ____________________________________________________________
 ____________________________________________________________
-The /to time of an event cannot be empty. Try: event project meeting /from Mon 2pm /to 4pm
+The /to date of an event cannot be empty. Try: event project meeting /from 2019-10-15 /to 2019-10-16
 ____________________________________________________________
 ____________________________________________________________
 Please give a task number after mark. Try: mark 1
 ____________________________________________________________
 ____________________________________________________________
 That task number does not exist. Use list to see the current numbers.
+____________________________________________________________
+____________________________________________________________
+Here are the tasks in your list:
+____________________________________________________________
+____________________________________________________________
+Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
+## Test case: invalid dates do not change the list
+
+**Aim:** Dates must be real ISO-8601 dates, and an invalid `/by`, `/from`, or `/to` value must not add a task.
+
+**Inputs:**
+```
+deadline return book /by 2019-02-30
+event project meeting /from 2019-13-01 /to 2019-10-16
+event project meeting /from 2019-10-15 /to not-a-date
+list
+bye
+```
+
+**Expected output:**
+```
+____________________________________________________________
+    _         _   _
+   / \   ___ | |_| |__   ___ _ __
+  / _ \ / _ \| __| '_ \ / _ \ '__|
+ / ___ \  __/| |_| | | |  __/ |
+/_/   \_\___|\__|_| |_|\___|_|
+Hello! I'm Aether.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+The /by date must be a valid date in yyyy-MM-dd format. Try: deadline return book /by 2019-10-15
+____________________________________________________________
+____________________________________________________________
+The /from date must be a valid date in yyyy-MM-dd format. Try: event project meeting /from 2019-10-15 /to 2019-10-16
+____________________________________________________________
+____________________________________________________________
+The /to date must be a valid date in yyyy-MM-dd format. Try: event project meeting /from 2019-10-15 /to 2019-10-16
 ____________________________________________________________
 ____________________________________________________________
 Here are the tasks in your list:
@@ -442,8 +483,8 @@ ____________________________________________________________
 **Inputs:**
 ```
 todo read book
-deadline return book /by June 6th
-event project meeting /from Aug 6th 2pm /to 4pm
+deadline return book /by 2019-06-06
+event project meeting /from 2019-08-06 /to 2019-08-07
 todo join sports club
 todo borrow book
 mark 1
@@ -472,12 +513,12 @@ Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
 Got it. I've added this task:
-  [D][ ] return book (by: June 6th)
+  [D][ ] return book (by: Jun 06 2019)
 Now you have 2 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
 Got it. I've added this task:
-  [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+  [E][ ] project meeting (from: Aug 06 2019 to: Aug 07 2019)
 Now you have 3 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
@@ -501,20 +542,20 @@ ____________________________________________________________
 ____________________________________________________________
 Here are the tasks in your list:
 1.[T][X] read book
-2.[D][ ] return book (by: June 6th)
-3.[E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+2.[D][ ] return book (by: Jun 06 2019)
+3.[E][ ] project meeting (from: Aug 06 2019 to: Aug 07 2019)
 4.[T][X] join sports club
 5.[T][ ] borrow book
 ____________________________________________________________
 ____________________________________________________________
 Noted. I've removed this task:
-  [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+  [E][ ] project meeting (from: Aug 06 2019 to: Aug 07 2019)
 Now you have 4 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
 Here are the tasks in your list:
 1.[T][X] read book
-2.[D][ ] return book (by: June 6th)
+2.[D][ ] return book (by: Jun 06 2019)
 3.[T][X] join sports club
 4.[T][ ] borrow book
 ____________________________________________________________
