@@ -4,6 +4,11 @@ Console UI tests for Aether. After each code update that changes chatbot behavio
 
 Dates and times are treated as plain strings.
 
+The test runner deletes `data/aether.txt` before each independent UI case, so saved
+tasks cannot affect another case. Persistence is checked separately by running one
+session that adds or changes tasks, then a second session whose `list` command must
+show the same tasks and done statuses.
+
 ## Test case: add a todo
 
 **Aim:** A `todo` command stores a task with type `T`, no date/time, and not-done status.

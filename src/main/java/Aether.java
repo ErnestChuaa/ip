@@ -1,3 +1,4 @@
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -18,6 +19,8 @@ public class Aether {
     private static final String TODO_COMMAND = "todo";
     private static final String DEADLINE_COMMAND = "deadline";
     private static final String EVENT_COMMAND = "event";
+    /** Storage for tasks, using an OS-independent path relative to the project root. */
+    private static final Storage STORAGE = new Storage(Path.of("data", "aether.txt"));
     /** Commands the user can type; shown in error messages as a hint. */
     private static final String COMMAND_HINT =
             "Try: list, todo, deadline, event, mark, unmark, delete, or bye.";
@@ -33,7 +36,7 @@ public class Aether {
 
         // ArrayList grows as needed, so there is no fixed MAX_TASKS or separate count.
         // Todo, Deadline, and Event objects are stored together as Task (polymorphism).
-        ArrayList<Task> tasks = new ArrayList<>();
+        ArrayList<Task> tasks = loadTasks();
 
         Scanner scanner = new Scanner(System.in);
         String command = scanner.nextLine();
@@ -180,8 +183,14 @@ public class Aether {
      * @param tasks the stored tasks
      * @param task the task to add
      */
-    private static void addTask(ArrayList<Task> tasks, Task task) {
+    private static void addTask(ArrayList<Task> tasks, Task task) throws AetherException {
         tasks.add(task);
+        try {
+            STORAGE.save(tasks);
+        } catch (AetherException e) {
+            tasks.remove(tasks.size() - 1);
+            throw e;
+        }
         printMessage("Got it. I've added this task:\n  " + task
                 + "\nNow you have " + tasks.size() + " tasks in the list.");
     }
@@ -195,8 +204,16 @@ public class Aether {
      */
     private static void markTask(ArrayList<Task> tasks, String command) throws AetherException {
         int index = parseTaskIndex(command, MARK_COMMAND, tasks.size());
-        tasks.get(index).markAsDone();
-        printMessage("Nice! I've marked this task as done:\n  " + tasks.get(index));
+        Task task = tasks.get(index);
+        TaskStatus previousStatus = task.status;
+        task.markAsDone();
+        try {
+            STORAGE.save(tasks);
+        } catch (AetherException e) {
+            task.status = previousStatus;
+            throw e;
+        }
+        printMessage("Nice! I've marked this task as done:\n  " + task);
     }
 
     /**
@@ -208,8 +225,16 @@ public class Aether {
      */
     private static void unmarkTask(ArrayList<Task> tasks, String command) throws AetherException {
         int index = parseTaskIndex(command, UNMARK_COMMAND, tasks.size());
-        tasks.get(index).markAsNotDone();
-        printMessage("OK, I've marked this task as not done yet:\n  " + tasks.get(index));
+        Task task = tasks.get(index);
+        TaskStatus previousStatus = task.status;
+        task.markAsNotDone();
+        try {
+            STORAGE.save(tasks);
+        } catch (AetherException e) {
+            task.status = previousStatus;
+            throw e;
+        }
+        printMessage("OK, I've marked this task as not done yet:\n  " + task);
     }
 
     /**
@@ -223,8 +248,29 @@ public class Aether {
     private static void deleteTask(ArrayList<Task> tasks, String command) throws AetherException {
         int index = parseTaskIndex(command, DELETE_COMMAND, tasks.size());
         Task removed = tasks.remove(index);
+        try {
+            STORAGE.save(tasks);
+        } catch (AetherException e) {
+            tasks.add(index, removed);
+            throw e;
+        }
         printMessage("Noted. I've removed this task:\n  " + removed
                 + "\nNow you have " + tasks.size() + " tasks in the list.");
+    }
+
+    /**
+     * Loads tasks saved by an earlier chatbot session. If a saved file is corrupt,
+     * Aether reports the problem and starts with an empty list so the user can continue.
+     *
+     * @return the saved task list, or an empty list when loading fails
+     */
+    private static ArrayList<Task> loadTasks() {
+        try {
+            return STORAGE.load();
+        } catch (AetherException e) {
+            printMessage(e.getMessage());
+            return new ArrayList<>();
+        }
     }
 
     /**
