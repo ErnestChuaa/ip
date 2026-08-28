@@ -55,6 +55,20 @@ class TaskListTest {
     }
 
     @Test
+    void formatMatchingTasksFiltersDescriptionsCaseInsensitively() {
+        TaskList tasks = new TaskList();
+        tasks.addTask(new Todo("read book"));
+        tasks.addTask(new Deadline("return book", LocalDate.of(2019, 10, 15)));
+        tasks.addTask(new Todo("write report"));
+        tasks.markTask(1);
+
+        assertEquals("Here are the matching tasks in your list:\n"
+                + "1.[T][ ] read book\n"
+                + "2.[D][X] return book (by: Oct 15 2019)", tasks.formatMatchingTasks("BOOK"));
+        assertEquals("Here are the matching tasks in your list:", tasks.formatMatchingTasks("missing"));
+    }
+
+    @Test
     void asListCannotBeChangedOutsideTaskList() {
         TaskList tasks = new TaskList();
         tasks.addTask(new Todo("read book"));

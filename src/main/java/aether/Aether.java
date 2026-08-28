@@ -66,6 +66,9 @@ public class Aether {
         case LIST:
             ui.showTaskList(tasks.formatTaskList());
             break;
+        case FIND:
+            ui.showTaskList(tasks.formatMatchingTasks(command.getArguments()));
+            break;
         case TODO:
         case DEADLINE:
         case EVENT:

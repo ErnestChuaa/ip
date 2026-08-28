@@ -294,7 +294,7 @@ ____________________________________________________________
 The description of a todo cannot be empty. Try: todo borrow book
 ____________________________________________________________
 ____________________________________________________________
-I don't recognise that command. Try: list, todo, deadline, event, mark, unmark, delete, or bye.
+I don't recognise that command. Try: list, find, todo, deadline, event, mark, unmark, delete, or bye.
 ____________________________________________________________
 ____________________________________________________________
 Here are the tasks in your list:
@@ -637,6 +637,76 @@ That task number does not exist. Use list to see the current numbers.
 ____________________________________________________________
 ____________________________________________________________
 Here are the tasks in your list:
+____________________________________________________________
+____________________________________________________________
+Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
+## Test case: find tasks and reject an empty keyword
+
+**Aim:** `find` searches descriptions without regard to letter case; an empty keyword is rejected without changing the list.
+
+**Inputs:**
+```
+todo read book
+deadline return book /by 2019-06-06
+todo write report
+mark 2
+find BOOK
+find
+find report
+list
+bye
+```
+
+**Expected output:**
+```
+____________________________________________________________
+    _         _   _
+   / \   ___ | |_| |__   ___ _ __
+  / _ \ / _ \| __| '_ \ / _ \ '__|
+ / ___ \  __/| |_| | | |  __/ |
+/_/   \_\___|\__|_| |_|\___|_|
+Hello! I'm Aether.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+  [T][ ] read book
+Now you have 1 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+  [D][ ] return book (by: Jun 06 2019)
+Now you have 2 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+  [T][ ] write report
+Now you have 3 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Nice! I've marked this task as done:
+  [D][X] return book (by: Jun 06 2019)
+____________________________________________________________
+____________________________________________________________
+Here are the matching tasks in your list:
+1.[T][ ] read book
+2.[D][X] return book (by: Jun 06 2019)
+____________________________________________________________
+____________________________________________________________
+The search keyword cannot be empty. Try: find book
+____________________________________________________________
+____________________________________________________________
+Here are the matching tasks in your list:
+1.[T][ ] write report
+____________________________________________________________
+____________________________________________________________
+Here are the tasks in your list:
+1.[T][ ] read book
+2.[D][X] return book (by: Jun 06 2019)
+3.[T][ ] write report
 ____________________________________________________________
 ____________________________________________________________
 Bye. Hope to see you again soon!

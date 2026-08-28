@@ -12,11 +12,15 @@ todo DESCRIPTION
 deadline DESCRIPTION /by yyyy-MM-dd
 event DESCRIPTION /from yyyy-MM-dd /to yyyy-MM-dd
 list
+find KEYWORD
 mark TASK_NUMBER
 unmark TASK_NUMBER
 delete TASK_NUMBER
 bye
 ```
+
+`find` searches task descriptions without regard to letter case. For example, `find BOOK` matches
+both `read book` and `return book`.
 
 ## Setting up in Intellij
 
