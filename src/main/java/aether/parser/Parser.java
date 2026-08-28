@@ -19,7 +19,7 @@ public class Parser {
      * Identifies the command word and its arguments.
      *
      * @param userInput the complete line typed by the user
-     * @return the recognised command and its arguments
+     * @return the recognized command and its arguments
      * @throws AetherException if the input is empty, unknown, or has unexpected arguments
      */
     public Command parse(String userInput) throws AetherException {
@@ -47,14 +47,14 @@ public class Parser {
      */
     public Task createTask(Command command) throws AetherException {
         switch (command.getType()) {
-        case TODO:
-            return createTodo(command.getArguments());
-        case DEADLINE:
-            return createDeadline(command.getArguments());
-        case EVENT:
-            return createEvent(command.getArguments());
-        default:
-            throw new IllegalArgumentException("This command does not create a task.");
+            case TODO:
+                return createTodo(command.getArguments());
+            case DEADLINE:
+                return createDeadline(command.getArguments());
+            case EVENT:
+                return createEvent(command.getArguments());
+            default:
+                throw new IllegalArgumentException("This command does not create a task.");
         }
     }
 
@@ -88,7 +88,7 @@ public class Parser {
         return index;
     }
 
-    /** Returns the enum value for one recognised command word. */
+    /** Returns the enum value for one recognized command word. */
     private CommandType findCommandType(String commandWord) throws AetherException {
         for (CommandType type : CommandType.values()) {
             if (type.getCommandWord().equals(commandWord)) {
