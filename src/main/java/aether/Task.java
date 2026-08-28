@@ -1,3 +1,5 @@
+package aether;
+
 /**
  * Shared fields and behaviour for every task type.
  * Subclasses add a type icon and any date/time details via {@link #toString()}.
@@ -49,6 +51,16 @@ public class Task {
      */
     public void markAsNotDone() {
         status = TaskStatus.PENDING;
+    }
+
+    /** Returns whether this task is pending or completed. */
+    public TaskStatus getStatus() {
+        return status;
+    }
+
+    /** Restores this task's status, for example after an unsuccessful save. */
+    public void setStatus(TaskStatus status) {
+        this.status = status;
     }
 
     /**

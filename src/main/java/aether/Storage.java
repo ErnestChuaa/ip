@@ -1,3 +1,5 @@
+package aether;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -55,7 +57,7 @@ public class Storage {
      * @param tasks the current task list
      * @throws AetherException if the tasks cannot be saved
      */
-    public void save(ArrayList<Task> tasks) throws AetherException {
+    public void save(List<Task> tasks) throws AetherException {
         try {
             Path parent = filePath.getParent();
             if (parent != null) {

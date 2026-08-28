@@ -1,3 +1,5 @@
+package aether;
+
 /**
  * A user-facing error, such as an unknown command or a missing task description.
  * The chatbot catches this, prints the message, and keeps running.

@@ -11,7 +11,7 @@ import sys
 
 LINE = "____________________________________________________________"
 PLAN_PATH = os.path.join("test", "ui-test-plan.md")
-SRC_GLOB = os.path.join("src", "main", "java", "*.java")
+SRC_GLOB = os.path.join("src", "main", "java", "aether", "*.java")
 
 
 def repo_root():
@@ -77,9 +77,9 @@ def compile_sources(root):
     out_dir = os.path.join(root, "out")
     if not os.path.isdir(out_dir):
         os.makedirs(out_dir)
-    java_files = glob(os.path.join(root, "src", "main", "java", "*.java"))
+    java_files = glob(os.path.join(root, "src", "main", "java", "aether", "*.java"))
     if not java_files:
-        raise SystemExit("No Java sources found under src/main/java")
+        raise SystemExit("No Java sources found under src/main/java/aether")
     command = ["javac", "-d", out_dir] + java_files
     print("Compiling:", " ".join(command))
     result = subprocess.Popen(
@@ -98,7 +98,7 @@ def run_session(root, inputs):
         commands.append("bye")
     stdin_text = "\n".join(commands) + "\n"
     process = subprocess.Popen(
-        ["java", "-cp", os.path.join(root, "out"), "Aether"],
+        ["java", "-cp", os.path.join(root, "out"), "aether.Aether"],
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,

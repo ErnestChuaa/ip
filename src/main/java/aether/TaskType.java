@@ -1,3 +1,5 @@
+package aether;
+
 /**
  * Represents the kind of task stored by Aether.
  */
