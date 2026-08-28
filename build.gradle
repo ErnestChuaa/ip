@@ -47,6 +47,10 @@ jar {
 
 shadowJar {
     archiveFileName = 'aether.jar'
+
+    manifest {
+        attributes 'Main-Class': 'aether.Aether'
+    }
 }
 
 run {

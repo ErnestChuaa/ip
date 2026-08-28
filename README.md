@@ -73,4 +73,20 @@ Use these commands from the project root:
 
 `test` runs the JUnit tests. `build` compiles the code and runs those tests. `run` starts the chatbot.
 
+## Packaging as a JAR
+
+Create the executable JAR with:
+
+```powershell
+.\gradlew.bat shadowJar
+```
+
+The generated file is `build\libs\aether.jar`. Copy that file to an empty folder and run it from that folder:
+
+```powershell
+java -jar "aether.jar"
+```
+
+The JAR is generated output, so do not commit it. Attach `aether.jar` to a GitHub release instead.
+
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
