@@ -90,7 +90,7 @@ public class TaskList {
     }
 
     /**
-     * Returns tasks whose descriptions contain the keyword, numbered in matching order.
+     * Returns tasks whose descriptions contain the keyword, using their numbers in the full task list.
      * Matching ignores letter case so that, for example, {@code find BOOK} finds {@code read book}.
      *
      * @param keyword the text to search for in task descriptions
@@ -99,12 +99,11 @@ public class TaskList {
     public String formatMatchingTasks(String keyword) {
         String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
         StringBuilder matches = new StringBuilder("Here are the matching tasks in your list:");
-        int matchNumber = 1;
-        for (Task task : tasks) {
+        for (int index = 0; index < tasks.size(); index++) {
+            Task task = tasks.get(index);
             String normalizedDescription = task.getDescription().toLowerCase(Locale.ROOT);
             if (normalizedDescription.contains(normalizedKeyword)) {
-                matches.append('\n').append(matchNumber).append('.').append(task);
-                matchNumber++;
+                matches.append('\n').append(index + 1).append('.').append(task);
             }
         }
         return matches.toString();

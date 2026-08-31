@@ -643,17 +643,20 @@ Bye. Hope to see you again soon!
 ____________________________________________________________
 ```
 
-## Test case: find tasks and reject an empty keyword
+## Test case: find tasks using full-list numbers
 
-**Aim:** `find` searches descriptions without regard to letter case; an empty keyword is rejected without changing the list.
+**Aim:** `find` searches descriptions without regard to letter case, preserves the full list's task numbers, and an empty
+keyword is rejected without changing the list. A displayed search-result number deletes the same task from the full list.
 
 **Inputs:**
 ```
+todo buy milk
 todo read book
 deadline return book /by 2019-06-06
 todo write report
-mark 2
+mark 3
 find BOOK
+delete 2
 find
 find report
 list
@@ -673,18 +676,23 @@ What can I do for you?
 ____________________________________________________________
 ____________________________________________________________
 Got it. I've added this task:
-  [T][ ] read book
+  [T][ ] buy milk
 Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
 Got it. I've added this task:
-  [D][ ] return book (by: Jun 06 2019)
+  [T][ ] read book
 Now you have 2 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
 Got it. I've added this task:
-  [T][ ] write report
+  [D][ ] return book (by: Jun 06 2019)
 Now you have 3 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+  [T][ ] write report
+Now you have 4 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
 Nice! I've marked this task as done:
@@ -692,21 +700,54 @@ Nice! I've marked this task as done:
 ____________________________________________________________
 ____________________________________________________________
 Here are the matching tasks in your list:
-1.[T][ ] read book
-2.[D][X] return book (by: Jun 06 2019)
+2.[T][ ] read book
+3.[D][X] return book (by: Jun 06 2019)
+____________________________________________________________
+____________________________________________________________
+Noted. I've removed this task:
+  [T][ ] read book
+Now you have 3 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
 The search keyword cannot be empty. Try: find book
 ____________________________________________________________
 ____________________________________________________________
 Here are the matching tasks in your list:
-1.[T][ ] write report
+3.[T][ ] write report
 ____________________________________________________________
 ____________________________________________________________
 Here are the tasks in your list:
-1.[T][ ] read book
+1.[T][ ] buy milk
 2.[D][X] return book (by: Jun 06 2019)
 3.[T][ ] write report
+____________________________________________________________
+____________________________________________________________
+Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
+## Test case: end of input exits cleanly
+
+**Aim:** Ending console input without a `bye` command exits normally and still shows the farewell message.
+
+**Inputs:**
+```
+list
+```
+
+**Expected output:**
+```
+____________________________________________________________
+    _         _   _
+   / \   ___ | |_| |__   ___ _ __
+  / _ \ / _ \| __| '_ \ / _ \ '__|
+ / ___ \  __/| |_| | | |  __/ |
+/_/   \_\___|\__|_| |_|\___|_|
+Hello! I'm Aether.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+Here are the tasks in your list:
 ____________________________________________________________
 ____________________________________________________________
 Bye. Hope to see you again soon!
