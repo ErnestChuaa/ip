@@ -23,7 +23,7 @@ public class Ui {
 
     /** Shows the chatbot greeting. */
     public void showWelcome() {
-        showMessage(BANNER + "Hello! I'm " + NAME + ".\nWhat can I do for you?");
+        showResponse(BANNER + getWelcomeMessage());
     }
 
     /** Reads one complete command line from the user. */
@@ -33,50 +33,55 @@ public class Ui {
 
     /** Shows an error message while keeping the chatbot ready for another command. */
     public void showError(String message) {
-        showMessage(message);
+        showResponse(message);
     }
 
-    /** Shows the current numbered task list. */
-    public void showTaskList(String formattedTaskList) {
-        showMessage(formattedTaskList);
+    /** Returns the chatbot greeting without console-specific divider lines. */
+    public String getWelcomeMessage() {
+        return "Hello! I'm " + NAME + ".\nWhat can I do for you?";
     }
 
-    /** Shows confirmation that a task was added. */
-    public void showTaskAdded(Task task, int taskCount) {
-        showMessage("Got it. I've added this task:\n  " + task
-                + "\nNow you have " + taskCount + " tasks in the list.");
+    /** Returns confirmation that a task was added. */
+    public String getTaskAddedMessage(Task task, int taskCount) {
+        return "Got it. I've added this task:\n  " + task
+                + "\nNow you have " + taskCount + " tasks in the list.";
     }
 
-    /** Shows confirmation that a task was marked as done. */
-    public void showTaskMarked(Task task) {
-        showMessage("Nice! I've marked this task as done:\n  " + task);
+    /** Returns confirmation that a task was marked as done. */
+    public String getTaskMarkedMessage(Task task) {
+        return "Nice! I've marked this task as done:\n  " + task;
     }
 
-    /** Shows confirmation that a task was marked as not done. */
-    public void showTaskUnmarked(Task task) {
-        showMessage("OK, I've marked this task as not done yet:\n  " + task);
+    /** Returns confirmation that a task was marked as not done. */
+    public String getTaskUnmarkedMessage(Task task) {
+        return "OK, I've marked this task as not done yet:\n  " + task;
     }
 
-    /** Shows confirmation that a task was deleted. */
-    public void showTaskDeleted(Task task, int taskCount) {
-        showMessage("Noted. I've removed this task:\n  " + task
-                + "\nNow you have " + taskCount + " tasks in the list.");
+    /** Returns confirmation that a task was deleted. */
+    public String getTaskDeletedMessage(Task task, int taskCount) {
+        return "Noted. I've removed this task:\n  " + task
+                + "\nNow you have " + taskCount + " tasks in the list.";
     }
 
     /** Shows the farewell message. */
     public void showGoodbye() {
-        showMessage("Bye. Hope to see you again soon!");
+        showResponse(getGoodbyeMessage());
+    }
+
+    /** Returns the chatbot farewell without console-specific divider lines. */
+    public String getGoodbyeMessage() {
+        return "Bye. Hope to see you again soon!";
+    }
+
+    /** Prints one chatbot response between horizontal divider lines. */
+    public void showResponse(String response) {
+        System.out.println(LINE);
+        System.out.println(response);
+        System.out.println(LINE);
     }
 
     /** Closes the input stream after the chatbot exits. */
     public void close() {
         scanner.close();
-    }
-
-    /** Prints text between the chatbot's horizontal divider lines. */
-    private void showMessage(String text) {
-        System.out.println(LINE);
-        System.out.println(text);
-        System.out.println(LINE);
     }
 }

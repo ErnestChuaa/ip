@@ -1,6 +1,6 @@
 # Aether
 
-Aether is a personal chatbot project, renamed from the Duke starter template. Given below are instructions on how to use it.
+Aether is a personal task chatbot with a JavaFX interface. Given below are instructions on how to use it.
 
 ## Commands
 
@@ -33,36 +33,8 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
    1. If there are any further prompts, accept the defaults.
 1. Configure the project to use **JDK 25** (not other versions) as explained in [here](https://www.jetbrains.com/help/idea/sdk.html#set-up-jdk).<br>
    In the same dialog, set the **Project language level** field to the `SDK default` option.
-1. After that, locate the `src/main/java/aether/Aether.java` file, right-click it, and choose `Run Aether.main()` (if the code editor is showing compile errors, try restarting the IDE). If the setup is correct, you should see something like the below as the output:
-   ```
-   ____________________________________________________________
-       _         _   _               
-      / \   ___ | |_| |__   ___ _ __ 
-     / _ \ / _ \| __| '_ \ / _ \ '__|
-    / ___ \  __/| |_| | | |  __/ |   
-   /_/   \_\___|\__|_| |_|\___|_|   
-   Hello! I'm Aether.
-   What can I do for you?
-   ____________________________________________________________
-   Bye. Hope to see you again soon!
-   ____________________________________________________________
-   ```
-
-## Compiling and running from the terminal
-
-From the project root, compile the Java files into the `out` directory:
-
-```powershell
-$aetherSourceFiles = Get-ChildItem -Recurse src\main\java -Filter *.java |
-    ForEach-Object { $_.FullName }
-javac -d out $aetherSourceFiles
-```
-
-Run Aether using the compiled files in `out`:
-
-```powershell
-java -cp out aether.Aether
-```
+1. After that, locate `src/main/java/aether/gui/Launcher.java`, right-click it, and choose
+   `Run Launcher.main()` (if the code editor is showing compile errors, try restarting the IDE).
 
 ## Building and running with Gradle
 
@@ -73,10 +45,12 @@ Use these commands from the project root:
 .\gradlew.bat test
 .\gradlew.bat build
 .\gradlew.bat run
+.\gradlew.bat runCli
 ```
 
-`test` runs the JUnit tests. `build` compiles the code and runs those tests. `run` starts the chatbot.
-`build` also runs Checkstyle, which verifies that the Java source follows the project's coding standard.
+`test` runs the JUnit tests. `build` compiles the code and runs those tests. `run` starts the JavaFX interface,
+while `runCli` keeps the text interface available for testing. `build` also runs Checkstyle, which verifies that
+the Java source follows the project's coding standard.
 
 To run the style checks directly:
 

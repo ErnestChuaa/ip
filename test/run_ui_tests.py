@@ -78,6 +78,11 @@ def compile_sources(root):
     if not os.path.isdir(out_dir):
         os.makedirs(out_dir)
     java_files = glob(os.path.join(root, SRC_GLOB), recursive=True)
+    gui_dir = os.path.normpath(os.path.join(root, "src", "main", "java", "aether", "gui"))
+    java_files = [
+        path for path in java_files
+        if not os.path.normpath(path).startswith(gui_dir + os.sep)
+    ]
     if not java_files:
         raise SystemExit("No Java sources found under src/main/java")
     command = ["javac", "-d", out_dir] + java_files

@@ -24,6 +24,11 @@ public class Aether {
     private final Ui ui;
     private final Parser parser;
 
+    /** Creates an Aether chatbot that uses the standard project-relative data file. */
+    public Aether() {
+        this(DEFAULT_STORAGE_PATH);
+    }
+
     /**
      * Creates an Aether chatbot that saves tasks at the supplied path.
      * If saved data cannot be loaded, the chatbot reports the problem and starts with an empty list.
@@ -46,7 +51,7 @@ public class Aether {
                 if (command.getType() == CommandType.BYE) {
                     break;
                 }
-                processCommand(command);
+                ui.showResponse(processCommand(command));
             } catch (AetherException e) {
                 ui.showError(e.getMessage());
             }
@@ -55,43 +60,64 @@ public class Aether {
         ui.close();
     }
 
+    /**
+     * Returns the greeting shown when a new GUI conversation starts.
+     *
+     * @return Aether's welcome message
+     */
+    public String getWelcomeMessage() {
+        return ui.getWelcomeMessage();
+    }
+
+    /**
+     * Processes one GUI command and returns the user-facing response without ending the application on invalid input.
+     *
+     * @param input the complete command entered by the user
+     * @return Aether's response, including a helpful error for malformed input
+     */
+    public String getResponse(String input) {
+        try {
+            Command command = parser.parse(input);
+            if (command.getType() == CommandType.BYE) {
+                return ui.getGoodbyeMessage();
+            }
+            return processCommand(command);
+        } catch (AetherException e) {
+            return e.getMessage();
+        }
+    }
+
     /** Starts Aether with its standard project-relative data file. */
     public static void main(String[] args) {
         new Aether(DEFAULT_STORAGE_PATH).run();
     }
 
-    /** Executes one validated, non-exit command. */
-    private void processCommand(Command command) throws AetherException {
+    /** Executes one validated, non-exit command and returns its user-facing response. */
+    private String processCommand(Command command) throws AetherException {
         switch (command.getType()) {
             case LIST:
-                ui.showTaskList(tasks.formatTaskList());
-                break;
+                return tasks.formatTaskList();
             case FIND:
-                ui.showTaskList(tasks.formatMatchingTasks(command.getArguments()));
-                break;
+                return tasks.formatMatchingTasks(command.getArguments());
             case TODO:
                 // Fallthrough
             case DEADLINE:
                 // Fallthrough
             case EVENT:
-                addTask(parser.createTask(command));
-                break;
+                return addTask(parser.createTask(command));
             case MARK:
-                markTask(command);
-                break;
+                return markTask(command);
             case UNMARK:
-                unmarkTask(command);
-                break;
+                return unmarkTask(command);
             case DELETE:
-                deleteTask(command);
-                break;
+                return deleteTask(command);
             default:
                 throw new IllegalStateException("Unexpected command type: " + command.getType());
         }
     }
 
-    /** Adds a task, saving it before showing the confirmation. */
-    private void addTask(Task task) throws AetherException {
+    /** Adds a task, saving it before returning the confirmation. */
+    private String addTask(Task task) throws AetherException {
         tasks.addTask(task);
         try {
             saveTasks();
@@ -99,11 +125,11 @@ public class Aether {
             tasks.removeLastTask();
             throw e;
         }
-        ui.showTaskAdded(task, tasks.getTaskCount());
+        return ui.getTaskAddedMessage(task, tasks.getTaskCount());
     }
 
     /** Marks a task as done and restores its previous state if saving fails. */
-    private void markTask(Command command) throws AetherException {
+    private String markTask(Command command) throws AetherException {
         int index = parser.parseTaskIndex(command, tasks.getTaskCount());
         TaskStatus previousStatus = tasks.getTaskStatus(index);
         Task task = tasks.markTask(index);
@@ -113,11 +139,11 @@ public class Aether {
             tasks.setTaskStatus(index, previousStatus);
             throw e;
         }
-        ui.showTaskMarked(task);
+        return ui.getTaskMarkedMessage(task);
     }
 
     /** Marks a task as not done and restores its previous state if saving fails. */
-    private void unmarkTask(Command command) throws AetherException {
+    private String unmarkTask(Command command) throws AetherException {
         int index = parser.parseTaskIndex(command, tasks.getTaskCount());
         TaskStatus previousStatus = tasks.getTaskStatus(index);
         Task task = tasks.unmarkTask(index);
@@ -127,11 +153,11 @@ public class Aether {
             tasks.setTaskStatus(index, previousStatus);
             throw e;
         }
-        ui.showTaskUnmarked(task);
+        return ui.getTaskUnmarkedMessage(task);
     }
 
     /** Deletes a task and restores it at its original position if saving fails. */
-    private void deleteTask(Command command) throws AetherException {
+    private String deleteTask(Command command) throws AetherException {
         int index = parser.parseTaskIndex(command, tasks.getTaskCount());
         Task task = tasks.deleteTask(index);
         try {
@@ -140,7 +166,7 @@ public class Aether {
             tasks.restoreTask(index, task);
             throw e;
         }
-        ui.showTaskDeleted(task, tasks.getTaskCount());
+        return ui.getTaskDeletedMessage(task, tasks.getTaskCount());
     }
 
     /** Loads saved tasks, reporting loading errors through the UI. */
