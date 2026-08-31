@@ -76,6 +76,15 @@ Use these commands from the project root:
 ```
 
 `test` runs the JUnit tests. `build` compiles the code and runs those tests. `run` starts the chatbot.
+`build` also runs Checkstyle, which verifies that the Java source follows the project's coding standard.
+
+To run the style checks directly:
+
+```powershell
+.\gradlew.bat checkstyleMain checkstyleTest
+```
+
+`checkstyleMain` checks production code and `checkstyleTest` checks test code.
 
 ## Packaging as a JAR
 
