@@ -8,9 +8,13 @@ import java.util.Locale;
 public class TaskList {
     private final ArrayList<Task> tasks;
 
-    /** Creates an empty task list. */
-    public TaskList() {
-        this.tasks = new ArrayList<>();
+    /**
+     * Creates a task list containing zero or more supplied tasks.
+     *
+     * @param tasks tasks to place in the list initially
+     */
+    public TaskList(Task... tasks) {
+        this.tasks = new ArrayList<>(List.of(tasks));
     }
 
     /**

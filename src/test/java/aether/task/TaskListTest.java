@@ -15,7 +15,7 @@ class TaskListTest {
         Todo readBook = new Todo("read book");
         Deadline returnBook = new Deadline("return book", LocalDate.of(2019, 10, 15));
         Event meeting = new Event("project meeting", LocalDate.of(2019, 10, 16), LocalDate.of(2019, 10, 17));
-        TaskList tasks = new TaskList(List.of(readBook, returnBook, meeting));
+        TaskList tasks = new TaskList(readBook, returnBook, meeting);
 
         assertSame(returnBook, tasks.markTask(1));
         assertEquals(TaskStatus.COMPLETED, tasks.getTaskStatus(1));
@@ -32,7 +32,7 @@ class TaskListTest {
     void restoreTaskAndSetTaskStatusUndoFailedChangesAtTheirOriginalIndex() {
         Todo first = new Todo("first");
         Todo second = new Todo("second");
-        TaskList tasks = new TaskList(List.of(first, second));
+        TaskList tasks = new TaskList(first, second);
 
         Task deleted = tasks.deleteTask(0);
         tasks.restoreTask(0, deleted);
