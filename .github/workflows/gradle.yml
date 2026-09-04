@@ -21,4 +21,4 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
       - name: Run tests, style checks, and package verification
-        run: ./gradlew check shadowJar
+        run: bash gradlew check shadowJar
