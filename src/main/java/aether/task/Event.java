@@ -9,8 +9,8 @@ import java.util.Locale;
  */
 public class Event extends Task {
     private static final DateTimeFormatter DISPLAY_FORMAT = DateTimeFormatter.ofPattern("MMM dd uuuu", Locale.ENGLISH);
-    protected LocalDate from;
-    protected LocalDate to;
+    private final LocalDate from;
+    private final LocalDate to;
 
     /**
      * Creates an event that starts as not done.
@@ -43,7 +43,7 @@ public class Event extends Task {
      */
     @Override
     public String toString() {
-        return "[" + type.getIcon() + "]" + super.toString()
+        return "[" + getTypeIcon() + "]" + super.toString()
                 + " (from: " + from.format(DISPLAY_FORMAT) + " to: " + to.format(DISPLAY_FORMAT) + ")";
     }
 }
