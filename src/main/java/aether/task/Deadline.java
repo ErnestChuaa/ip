@@ -9,7 +9,7 @@ import java.util.Locale;
  */
 public class Deadline extends Task {
     private static final DateTimeFormatter DISPLAY_FORMAT = DateTimeFormatter.ofPattern("MMM dd uuuu", Locale.ENGLISH);
-    protected LocalDate by;
+    private final LocalDate by;
 
     /**
      * Creates a deadline that starts as not done.
@@ -34,6 +34,6 @@ public class Deadline extends Task {
      */
     @Override
     public String toString() {
-        return "[" + type.getIcon() + "]" + super.toString() + " (by: " + by.format(DISPLAY_FORMAT) + ")";
+        return "[" + getTypeIcon() + "]" + super.toString() + " (by: " + by.format(DISPLAY_FORMAT) + ")";
     }
 }

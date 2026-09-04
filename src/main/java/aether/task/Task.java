@@ -1,13 +1,15 @@
 package aether.task;
 
+import java.util.Objects;
+
 /**
  * Shared fields and behavior for every task type.
  * Subclasses add a type icon and any date/time details via {@link #toString()}.
  */
 public class Task {
-    protected String description;
-    protected TaskStatus status;
-    protected TaskType type;
+    private final String description;
+    private TaskStatus status;
+    private final TaskType type;
 
     /**
      * Creates a task that starts as not done.
@@ -25,9 +27,9 @@ public class Task {
      * @param type the kind of task
      */
     public Task(String description, TaskType type) {
-        this.description = description;
+        this.description = Objects.requireNonNull(description);
         this.status = TaskStatus.PENDING;
-        this.type = type;
+        this.type = Objects.requireNonNull(type);
     }
 
     /**
@@ -67,6 +69,11 @@ public class Task {
     public void setStatus(TaskStatus status) {
         assert status != null : "A task status must be provided.";
         this.status = status;
+    }
+
+    /** Returns the icon identifying this task type. */
+    protected String getTypeIcon() {
+        return type.getIcon();
     }
 
     /**

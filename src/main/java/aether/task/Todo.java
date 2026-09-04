@@ -20,6 +20,6 @@ public class Todo extends Task {
      */
     @Override
     public String toString() {
-        return "[" + type.getIcon() + "]" + super.toString();
+        return "[" + getTypeIcon() + "]" + super.toString();
     }
 }

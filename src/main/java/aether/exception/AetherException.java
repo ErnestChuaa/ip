@@ -5,6 +5,9 @@ package aether.exception;
  * The chatbot catches this, prints the message, and keeps running.
  */
 public class AetherException extends Exception {
+    /** Version identifier required by the serializable exception superclass. */
+    private static final long serialVersionUID = 1L;
+
     /**
      * Creates an error with a message that can be shown to the user.
      *
