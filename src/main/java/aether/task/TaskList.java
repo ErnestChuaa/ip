@@ -3,6 +3,8 @@ package aether.task;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /** Owns the ordered collection of tasks and operations performed on that collection. */
 public class TaskList {
@@ -104,12 +106,13 @@ public class TaskList {
     public String formatMatchingTasks(String keyword) {
         String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
         StringBuilder matches = new StringBuilder("Here are the matching tasks in your list:");
-        for (int index = 0; index < tasks.size(); index++) {
-            Task task = tasks.get(index);
-            String normalizedDescription = task.getDescription().toLowerCase(Locale.ROOT);
-            if (normalizedDescription.contains(normalizedKeyword)) {
-                matches.append('\n').append(index + 1).append('.').append(task);
-            }
+        String matchingTasks = IntStream.range(0, tasks.size())
+                .filter(index -> tasks.get(index).getDescription().toLowerCase(Locale.ROOT)
+                        .contains(normalizedKeyword))
+                .mapToObj(index -> (index + 1) + "." + tasks.get(index))
+                .collect(Collectors.joining("\n"));
+        if (!matchingTasks.isEmpty()) {
+            matches.append('\n').append(matchingTasks);
         }
         return matches.toString();
     }
