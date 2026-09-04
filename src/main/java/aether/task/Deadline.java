@@ -3,6 +3,7 @@ package aether.task;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Optional;
 
 /**
  * A task that must be done before a specific date.
@@ -25,6 +26,16 @@ public class Deadline extends Task {
     /** Returns the date by which this task must be completed. */
     public LocalDate getBy() {
         return by;
+    }
+
+    /**
+     * Returns the deadline date used to sort this task.
+     *
+     * @return the deadline date
+     */
+    @Override
+    public Optional<LocalDate> getSortDate() {
+        return Optional.of(by);
     }
 
     /**

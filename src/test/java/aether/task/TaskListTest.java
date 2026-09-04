@@ -70,6 +70,25 @@ class TaskListTest {
     }
 
     @Test
+    void sortByDateOrdersDatedTasksStablyAndPlacesTodosLast() {
+        Todo buyMilk = new Todo("buy milk");
+        Deadline submitReport = new Deadline("submit report", LocalDate.of(2026, 9, 12));
+        Event workshop = new Event("workshop", LocalDate.of(2026, 9, 5), LocalDate.of(2026, 9, 6));
+        Deadline renewPass = new Deadline("renew pass", LocalDate.of(2026, 9, 5));
+        Todo readBook = new Todo("read book");
+        TaskList tasks = new TaskList(buyMilk, submitReport, workshop, renewPass, readBook);
+
+        List<Task> previousOrder = tasks.sortByDate();
+
+        assertEquals(List.of(buyMilk, submitReport, workshop, renewPass, readBook), previousOrder);
+        assertEquals(List.of(workshop, renewPass, submitReport, buyMilk, readBook), tasks.asList());
+
+        tasks.restoreOrder(previousOrder);
+
+        assertEquals(previousOrder, tasks.asList());
+    }
+
+    @Test
     void asListCannotBeChangedOutsideTaskList() {
         TaskList tasks = new TaskList();
         tasks.addTask(new Todo("read book"));

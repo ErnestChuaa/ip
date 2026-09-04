@@ -1,6 +1,8 @@
 package aether.task;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -85,6 +87,25 @@ public class TaskList {
     /** Returns an immutable view of the tasks for storage. */
     public List<Task> asList() {
         return List.copyOf(tasks);
+    }
+
+    /**
+     * Sorts dated tasks from the earliest relevant date to the latest. Events use their start date;
+     * tasks without a date are placed last. Tasks with the same date keep their previous order.
+     *
+     * @return the order before sorting, so it can be restored if saving fails
+     */
+    public List<Task> sortByDate() {
+        List<Task> previousOrder = List.copyOf(tasks);
+        tasks.sort(Comparator.comparing(task -> task.getSortDate().orElse(LocalDate.MAX)));
+        return previousOrder;
+    }
+
+    /** Restores the entire task list to an earlier order after an unsuccessful save. */
+    public void restoreOrder(List<Task> previousOrder) {
+        assert previousOrder != null : "A previous task order must be provided.";
+        tasks.clear();
+        tasks.addAll(previousOrder);
     }
 
     /** Returns the numbered task list in the form shown to the user. */

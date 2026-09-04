@@ -13,6 +13,7 @@ deadline DESCRIPTION /by yyyy-MM-dd
 event DESCRIPTION /from yyyy-MM-dd /to yyyy-MM-dd
 list
 find KEYWORD
+sort
 mark TASK_NUMBER
 unmark TASK_NUMBER
 delete TASK_NUMBER
@@ -21,6 +22,9 @@ bye
 
 `find` searches task descriptions without regard to letter case. For example, `find BOOK` matches
 both `read book` and `return book`.
+
+`sort` orders deadlines by due date and events by start date. Tasks with the same date keep their
+existing order, while todos without a date are shown last. It does not take any arguments.
 
 ## Setting up in Intellij
 
@@ -74,6 +78,6 @@ The generated file is `build\libs\aether.jar`. Copy that file to an empty folder
 java -jar "aether.jar"
 ```
 
-The JAR is generated output, so do not commit it. Attach `aether.jar` to a GitHub release instead.
+The JAR is generated output, so do not commit it. Creating a GitHub release for it is optional.
 
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.

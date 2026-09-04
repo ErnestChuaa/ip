@@ -13,7 +13,7 @@ import aether.task.Todo;
 public class Parser {
     /** Commands the user can type; shown in error messages as a hint. */
     private static final String COMMAND_HINT =
-            "Try: list, find, todo, deadline, event, mark, unmark, delete, or bye.";
+            "Try: list, find, sort, todo, deadline, event, mark, unmark, delete, or bye.";
 
     /**
      * Identifies the command word and its arguments.
@@ -35,7 +35,7 @@ public class Parser {
         if (type == CommandType.FIND && arguments.isEmpty()) {
             throw new AetherException("The search keyword cannot be empty. Try: find book");
         }
-        if ((type == CommandType.LIST || type == CommandType.BYE) && !arguments.isEmpty()) {
+        if ((type == CommandType.LIST || type == CommandType.SORT || type == CommandType.BYE) && !arguments.isEmpty()) {
             throw unknownCommand();
         }
         return new Command(type, arguments);

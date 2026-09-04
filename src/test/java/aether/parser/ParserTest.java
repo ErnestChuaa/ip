@@ -43,6 +43,12 @@ class ParserTest {
     }
 
     @Test
+    void parseRecognisesSortAndRejectsSortArguments() throws AetherException {
+        assertEquals(CommandType.SORT, parser.parse("  sort  ").getType());
+        assertError("sort tomorrow", "I don't recognise that command");
+    }
+
+    @Test
     void createTaskBuildsEachSupportedTaskType() throws AetherException {
         Todo todo = assertInstanceOf(Todo.class, parser.createTask(parser.parse("todo borrow book")));
         Deadline deadline = assertInstanceOf(

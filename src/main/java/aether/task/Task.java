@@ -1,6 +1,8 @@
 package aether.task;
 
+import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Shared fields and behavior for every task type.
@@ -74,6 +76,16 @@ public class Task {
     /** Returns the icon identifying this task type. */
     protected String getTypeIcon() {
         return type.getIcon();
+    }
+
+    /**
+     * Returns the date used by the {@code sort} command, if this task has one.
+     * Tasks without a date are placed after dated tasks.
+     *
+     * @return this task's relevant date, or an empty value for an undated task
+     */
+    public Optional<LocalDate> getSortDate() {
+        return Optional.empty();
     }
 
     /**

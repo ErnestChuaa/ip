@@ -3,6 +3,7 @@ package aether.task;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Optional;
 
 /**
  * A task that starts on one date and ends on another date.
@@ -33,6 +34,16 @@ public class Event extends Task {
     /** Returns the date on which this event ends. */
     public LocalDate getTo() {
         return to;
+    }
+
+    /**
+     * Returns the event start date used to sort this task.
+     *
+     * @return the event start date
+     */
+    @Override
+    public Optional<LocalDate> getSortDate() {
+        return Optional.of(from);
     }
 
     /**

@@ -68,6 +68,11 @@ public class Ui {
                 + "\nNow you have " + taskCount + " tasks in the list.";
     }
 
+    /** Returns the task list after it has been ordered by date. */
+    public String getTasksSortedMessage(String sortedTasks) {
+        return "I've sorted the tasks by date.\n" + sortedTasks;
+    }
+
     /** Shows the farewell message. */
     public void showGoodbye() {
         showResponse(getGoodbyeMessage());

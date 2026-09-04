@@ -1,6 +1,7 @@
 package aether;
 
 import java.nio.file.Path;
+import java.util.List;
 
 import aether.exception.AetherException;
 import aether.parser.Command;
@@ -101,6 +102,8 @@ public class Aether {
                 return tasks.formatTaskList();
             case FIND:
                 return tasks.formatMatchingTasks(command.getArguments());
+            case SORT:
+                return sortTasks();
             case TODO:
                 // Fallthrough
             case DEADLINE:
@@ -169,6 +172,18 @@ public class Aether {
             throw e;
         }
         return ui.getTaskDeletedMessage(task, tasks.getTaskCount());
+    }
+
+    /** Sorts tasks by date and restores their prior order if saving the new order fails. */
+    private String sortTasks() throws AetherException {
+        List<Task> previousOrder = tasks.sortByDate();
+        try {
+            saveTasks();
+        } catch (AetherException e) {
+            tasks.restoreOrder(previousOrder);
+            throw e;
+        }
+        return ui.getTasksSortedMessage(tasks.formatTaskList());
     }
 
     /** Loads saved tasks, reporting loading errors through the UI. */

@@ -294,7 +294,7 @@ ____________________________________________________________
 The description of a todo cannot be empty. Try: todo borrow book
 ____________________________________________________________
 ____________________________________________________________
-I don't recognise that command. Try: list, find, todo, deadline, event, mark, unmark, delete, or bye.
+I don't recognise that command. Try: list, find, sort, todo, deadline, event, mark, unmark, delete, or bye.
 ____________________________________________________________
 ____________________________________________________________
 Here are the tasks in your list:
@@ -748,6 +748,76 @@ What can I do for you?
 ____________________________________________________________
 ____________________________________________________________
 Here are the tasks in your list:
+____________________________________________________________
+____________________________________________________________
+Bye. Hope to see you again soon!
+____________________________________________________________
+```
+## Test case: sort dated tasks and reject sort arguments
+
+**Aim:** `sort` orders events by start date and deadlines by due date, keeps equal-date tasks in their
+original order, places todos last, saves the order, and rejects unexpected arguments without changing the list.
+
+**Inputs:**
+```
+todo buy milk
+deadline submit report /by 2026-09-12
+event workshop /from 2026-09-05 /to 2026-09-06
+deadline renew pass /by 2026-09-05
+sort tomorrow
+sort
+list
+bye
+```
+
+**Expected output:**
+```
+____________________________________________________________
+    _         _   _
+   / \   ___ | |_| |__   ___ _ __
+  / _ \ / _ \| __| '_ \ / _ \ '__|
+ / ___ \  __/| |_| | | |  __/ |
+/_/   \_\___|\__|_| |_|\___|_|
+Hello! I'm Aether.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+  [T][ ] buy milk
+Now you have 1 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+  [D][ ] submit report (by: Sep 12 2026)
+Now you have 2 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+  [E][ ] workshop (from: Sep 05 2026 to: Sep 06 2026)
+Now you have 3 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+  [D][ ] renew pass (by: Sep 05 2026)
+Now you have 4 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+I don't recognise that command. Try: list, find, sort, todo, deadline, event, mark, unmark, delete, or bye.
+____________________________________________________________
+____________________________________________________________
+I've sorted the tasks by date.
+Here are the tasks in your list:
+1.[E][ ] workshop (from: Sep 05 2026 to: Sep 06 2026)
+2.[D][ ] renew pass (by: Sep 05 2026)
+3.[D][ ] submit report (by: Sep 12 2026)
+4.[T][ ] buy milk
+____________________________________________________________
+____________________________________________________________
+Here are the tasks in your list:
+1.[E][ ] workshop (from: Sep 05 2026 to: Sep 06 2026)
+2.[D][ ] renew pass (by: Sep 05 2026)
+3.[D][ ] submit report (by: Sep 12 2026)
+4.[T][ ] buy milk
 ____________________________________________________________
 ____________________________________________________________
 Bye. Hope to see you again soon!

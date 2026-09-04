@@ -6,6 +6,8 @@ public enum CommandType {
     LIST("list"),
     /** Shows tasks whose descriptions contain a keyword. */
     FIND("find"),
+    /** Orders tasks by their deadline or event start date. */
+    SORT("sort"),
     /** Marks a task as completed. */
     MARK("mark"),
     /** Marks a task as pending. */

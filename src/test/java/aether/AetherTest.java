@@ -38,4 +38,27 @@ class AetherTest {
         assertEquals("Here are the tasks in your list:", aether.getResponse("list"));
         assertEquals(originalData, Files.readString(dataFile, StandardCharsets.UTF_8));
     }
+    @Test
+    void sortOrdersTasksByDateAndSavesTheNewOrder() {
+        Path dataFile = temporaryDirectory.resolve("aether.txt");
+        Aether aether = new Aether(dataFile);
+        aether.getResponse("todo buy milk");
+        aether.getResponse("deadline submit report /by 2026-09-12");
+        aether.getResponse("event workshop /from 2026-09-05 /to 2026-09-06");
+        aether.getResponse("deadline renew pass /by 2026-09-05");
+
+        assertEquals("I've sorted the tasks by date.\n"
+                + "Here are the tasks in your list:\n"
+                + "1.[E][ ] workshop (from: Sep 05 2026 to: Sep 06 2026)\n"
+                + "2.[D][ ] renew pass (by: Sep 05 2026)\n"
+                + "3.[D][ ] submit report (by: Sep 12 2026)\n"
+                + "4.[T][ ] buy milk", aether.getResponse("sort"));
+
+        Aether reloadedAether = new Aether(dataFile);
+        assertEquals("Here are the tasks in your list:\n"
+                + "1.[E][ ] workshop (from: Sep 05 2026 to: Sep 06 2026)\n"
+                + "2.[D][ ] renew pass (by: Sep 05 2026)\n"
+                + "3.[D][ ] submit report (by: Sep 12 2026)\n"
+                + "4.[T][ ] buy milk", reloadedAether.getResponse("list"));
+    }
 }
