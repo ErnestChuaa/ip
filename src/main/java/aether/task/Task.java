@@ -65,6 +65,7 @@ public class Task {
 
     /** Restores this task's status, for example after an unsuccessful save. */
     public void setStatus(TaskStatus status) {
+        assert status != null : "A task status must be provided.";
         this.status = status;
     }
 

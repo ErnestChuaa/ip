@@ -30,46 +30,51 @@ public class TaskList {
 
     /** Adds a task at the end of the list. */
     public void addTask(Task task) {
+        assert task != null : "Only a task can be added to the task list.";
         tasks.add(task);
     }
 
     /** Removes and returns the last task, used to undo a failed save after adding a task. */
     public Task removeLastTask() {
+        assert !tasks.isEmpty() : "A task must exist before it can be removed.";
         return tasks.remove(tasks.size() - 1);
     }
 
     /** Marks and returns the task at a 0-based index. */
     public Task markTask(int index) {
-        Task task = tasks.get(index);
+        Task task = getTaskAt(index);
         task.markAsDone();
         return task;
     }
 
     /** Marks as pending and returns the task at a 0-based index. */
     public Task unmarkTask(int index) {
-        Task task = tasks.get(index);
+        Task task = getTaskAt(index);
         task.markAsNotDone();
         return task;
     }
 
     /** Removes and returns the task at a 0-based index. */
     public Task deleteTask(int index) {
+        assert hasTaskAt(index) : "The task index must refer to an existing task.";
         return tasks.remove(index);
     }
 
     /** Restores a task to a 0-based index after a failed save. */
     public void restoreTask(int index, Task task) {
+        assert index >= 0 && index <= tasks.size() : "The restore index must be inside the task list.";
+        assert task != null : "Only a task can be restored.";
         tasks.add(index, task);
     }
 
     /** Returns the status of the task at a 0-based index. */
     public TaskStatus getTaskStatus(int index) {
-        return tasks.get(index).getStatus();
+        return getTaskAt(index).getStatus();
     }
 
     /** Restores the status of the task at a 0-based index after a failed save. */
     public void setTaskStatus(int index, TaskStatus status) {
-        tasks.get(index).setStatus(status);
+        getTaskAt(index).setStatus(status);
     }
 
     /** Returns the number of stored tasks. */
@@ -110,5 +115,16 @@ public class TaskList {
             matches.append('\n').append(matchingTasks);
         }
         return matches.toString();
+    }
+
+    /** Returns the task at a validated 0-based index. */
+    private Task getTaskAt(int index) {
+        assert hasTaskAt(index) : "The task index must refer to an existing task.";
+        return tasks.get(index);
+    }
+
+    /** Returns whether a 0-based index identifies one of the stored tasks. */
+    private boolean hasTaskAt(int index) {
+        return index >= 0 && index < tasks.size();
     }
 }
