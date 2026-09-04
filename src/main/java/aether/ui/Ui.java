@@ -26,6 +26,11 @@ public class Ui {
         showResponse(BANNER + getWelcomeMessage());
     }
 
+    /** Returns whether another complete command can be read before the input stream ends. */
+    public boolean hasNextCommand() {
+        return scanner.hasNextLine();
+    }
+
     /** Reads one complete command line from the user. */
     public String readCommand() {
         return scanner.nextLine();

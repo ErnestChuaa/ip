@@ -23,6 +23,8 @@ public class Aether {
     private final TaskList tasks;
     private final Ui ui;
     private final Parser parser;
+    /** Prevents unreadable saved data from being overwritten by a recovered empty task list. */
+    private boolean canSaveTasks = true;
 
     /** Creates an Aether chatbot that uses the standard project-relative data file. */
     public Aether() {
@@ -31,7 +33,7 @@ public class Aether {
 
     /**
      * Creates an Aether chatbot that saves tasks at the supplied path.
-     * If saved data cannot be loaded, the chatbot reports the problem and starts with an empty list.
+     * If saved data cannot be loaded, the chatbot reports the problem and starts with a read-only empty list.
      *
      * @param filePath the path used to save tasks between sessions
      */
@@ -42,10 +44,10 @@ public class Aether {
         tasks = loadTasks();
     }
 
-    /** Runs the chatbot until the user enters {@code bye}. */
+    /** Runs the chatbot until the user enters {@code bye} or the input stream ends. */
     public void run() {
         ui.showWelcome();
-        while (true) {
+        while (ui.hasNextCommand()) {
             try {
                 Command command = parser.parse(ui.readCommand());
                 if (command.getType() == CommandType.BYE) {
@@ -174,6 +176,7 @@ public class Aether {
         try {
             return new TaskList(storage.load());
         } catch (AetherException e) {
+            canSaveTasks = false;
             ui.showError(e.getMessage());
             return new TaskList();
         }
@@ -181,6 +184,10 @@ public class Aether {
 
     /** Saves the current task list through the storage component. */
     private void saveTasks() throws AetherException {
+        if (!canSaveTasks) {
+            throw new AetherException("I cannot save changes because the saved tasks could not be loaded. "
+                    + "Repair or remove data/aether.txt, then restart Aether.");
+        }
         storage.save(tasks.asList());
     }
 }

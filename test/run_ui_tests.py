@@ -99,9 +99,9 @@ def compile_sources(root):
 
 def run_session(root, inputs):
     commands = list(inputs)
-    if not commands or commands[-1] != "bye":
-        commands.append("bye")
-    stdin_text = "\n".join(commands) + "\n"
+    stdin_text = "\n".join(commands)
+    if commands:
+        stdin_text += "\n"
     process = subprocess.Popen(
         ["java", "-cp", os.path.join(root, "out"), "aether.Aether"],
         stdin=subprocess.PIPE,
@@ -138,6 +138,11 @@ def format_session(commands, actual):
             record.append(LINE)
             record.append(messages[message_index])
             record.append(LINE)
+    for message_index in range(len(commands) + 1, len(messages)):
+        record.append("(end of input)")
+        record.append(LINE)
+        record.append(messages[message_index])
+        record.append(LINE)
     return "\n".join(record)
 
 
@@ -145,7 +150,12 @@ def first_mismatch(expected_messages, actual_messages, commands):
     count = min(len(expected_messages), len(actual_messages))
     for index in range(count):
         if expected_messages[index] != actual_messages[index]:
-            label = "greeting" if index == 0 else commands[index - 1]
+            if index == 0:
+                label = "greeting"
+            elif index <= len(commands):
+                label = commands[index - 1]
+            else:
+                label = "end of input"
             return label, expected_messages[index], actual_messages[index]
     if len(expected_messages) != len(actual_messages):
         return (
