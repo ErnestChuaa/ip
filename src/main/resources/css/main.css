@@ -4,7 +4,7 @@
 }
 
 .header {
-    -fx-background-color: linear-gradient(to right, #172554, #1d4ed8);
+    -fx-background-color: linear-gradient(to right, #1e1b4b, #4338ca);
 }
 
 .title {
@@ -76,7 +76,8 @@
 }
 
 .aether-avatar {
-    -fx-background-color: #0f766e;
+    -fx-background-color: #4338ca;
+    -fx-font-size: 18px;
 }
 
 .error-avatar {

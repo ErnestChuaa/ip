@@ -19,11 +19,11 @@ class AetherTest {
     void getResponseProcessesCommandsAndKeepsWorkingAfterInvalidInput() {
         Aether aether = new Aether(temporaryDirectory.resolve("aether.txt"));
 
-        assertTrue(aether.getWelcomeMessage().contains("Hello! I'm Aether."));
+        assertTrue(aether.getWelcomeMessage().contains("I'm Aether, your calm guide"));
         assertTrue(aether.getResponse("todo read book").contains("[T][ ] read book"));
         assertTrue(aether.getResponse("todo").contains("description of a todo cannot be empty"));
         assertEquals("Here are the tasks in your list:\n1.[T][ ] read book", aether.getResponse("list"));
-        assertEquals("Bye. Hope to see you again soon!", aether.getResponse("bye"));
+        assertEquals("Until next time. May your day stay clear and focused.", aether.getResponse("bye"));
     }
 
     @Test
@@ -47,7 +47,7 @@ class AetherTest {
         aether.getResponse("event workshop /from 2026-09-05 /to 2026-09-06");
         aether.getResponse("deadline renew pass /by 2026-09-05");
 
-        assertEquals("I've sorted the tasks by date.\n"
+        assertEquals("Your schedule is aligned by date.\n"
                 + "Here are the tasks in your list:\n"
                 + "1.[E][ ] workshop (from: Sep 05 2026 to: Sep 06 2026)\n"
                 + "2.[D][ ] renew pass (by: Sep 05 2026)\n"

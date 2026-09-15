@@ -47,7 +47,7 @@ public class DialogBox extends HBox {
      * @return an Aether dialog box
      */
     public static DialogBox getAetherDialog(String text) {
-        return new DialogBox(text, "AE", DialogType.AETHER);
+        return new DialogBox(text, "*", DialogType.AETHER);
     }
 
     /**

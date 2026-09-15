@@ -6,6 +6,8 @@
   available chat width and remain readable.
 - Enter `todo` without a description. Confirm that Aether's corrective reply uses the red error bubble and `!` badge,
   while a subsequent valid `todo read book` reply uses the normal Aether bubble.
+- Confirm that the header says "A calm guide for busy days", normal Aether replies use the star badge, and the calm,
+  focus-oriented wording is consistent across adding, completing, reopening, deleting, sorting, and exiting.
 
 Console UI tests for Aether. After each code update that changes chatbot behaviour, update this file if needed and run `python test/run_ui_tests.py` from the repository root.
 
@@ -35,11 +37,11 @@ ____________________________________________________________
   / _ \ / _ \| __| '_ \ / _ \ '__|
  / ___ \  __/| |_| | | |  __/ |
 /_/   \_\___|\__|_| |_|\___|_|
-Hello! I'm Aether.
-What can I do for you?
+Hello! I'm Aether, your calm guide through a busy day.
+What shall we bring into focus?
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [T][ ] borrow book
 Now you have 1 tasks in the list.
 ____________________________________________________________
@@ -48,7 +50,7 @@ Here are the tasks in your list:
 1.[T][ ] borrow book
 ____________________________________________________________
 ____________________________________________________________
-Bye. Hope to see you again soon!
+Until next time. May your day stay clear and focused.
 ____________________________________________________________
 ```
 
@@ -71,11 +73,11 @@ ____________________________________________________________
   / _ \ / _ \| __| '_ \ / _ \ '__|
  / ___ \  __/| |_| | | |  __/ |
 /_/   \_\___|\__|_| |_|\___|_|
-Hello! I'm Aether.
-What can I do for you?
+Hello! I'm Aether, your calm guide through a busy day.
+What shall we bring into focus?
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [D][ ] return book (by: Oct 15 2019)
 Now you have 1 tasks in the list.
 ____________________________________________________________
@@ -84,7 +86,7 @@ Here are the tasks in your list:
 1.[D][ ] return book (by: Oct 15 2019)
 ____________________________________________________________
 ____________________________________________________________
-Bye. Hope to see you again soon!
+Until next time. May your day stay clear and focused.
 ____________________________________________________________
 ```
 
@@ -107,11 +109,11 @@ ____________________________________________________________
   / _ \ / _ \| __| '_ \ / _ \ '__|
  / ___ \  __/| |_| | | |  __/ |
 /_/   \_\___|\__|_| |_|\___|_|
-Hello! I'm Aether.
-What can I do for you?
+Hello! I'm Aether, your calm guide through a busy day.
+What shall we bring into focus?
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [E][ ] project meeting (from: Oct 15 2019 to: Oct 16 2019)
 Now you have 1 tasks in the list.
 ____________________________________________________________
@@ -120,7 +122,7 @@ Here are the tasks in your list:
 1.[E][ ] project meeting (from: Oct 15 2019 to: Oct 16 2019)
 ____________________________________________________________
 ____________________________________________________________
-Bye. Hope to see you again soon!
+Until next time. May your day stay clear and focused.
 ____________________________________________________________
 ```
 
@@ -153,40 +155,40 @@ ____________________________________________________________
   / _ \ / _ \| __| '_ \ / _ \ '__|
  / ___ \  __/| |_| | | |  __/ |
 /_/   \_\___|\__|_| |_|\___|_|
-Hello! I'm Aether.
-What can I do for you?
+Hello! I'm Aether, your calm guide through a busy day.
+What shall we bring into focus?
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [T][ ] read book
 Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [D][ ] return book (by: Jun 06 2019)
 Now you have 2 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [E][ ] project meeting (from: Aug 06 2019 to: Aug 07 2019)
 Now you have 3 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [T][ ] join sports club
 Now you have 4 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [T][ ] borrow book
 Now you have 5 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Nice! I've marked this task as done:
+Excellent - this task is complete:
   [T][X] read book
 ____________________________________________________________
 ____________________________________________________________
-Nice! I've marked this task as done:
+Excellent - this task is complete:
   [T][X] join sports club
 ____________________________________________________________
 ____________________________________________________________
@@ -198,17 +200,17 @@ Here are the tasks in your list:
 5.[T][ ] borrow book
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [D][ ] return book (by: Oct 15 2019)
 Now you have 6 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [E][ ] project meeting (from: Oct 15 2019 to: Oct 16 2019)
 Now you have 7 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [D][ ] do homework (by: Jan 20 2020)
 Now you have 8 tasks in the list.
 ____________________________________________________________
@@ -224,7 +226,7 @@ Here are the tasks in your list:
 8.[D][ ] do homework (by: Jan 20 2020)
 ____________________________________________________________
 ____________________________________________________________
-Bye. Hope to see you again soon!
+Until next time. May your day stay clear and focused.
 ____________________________________________________________
 ```
 
@@ -249,20 +251,20 @@ ____________________________________________________________
   / _ \ / _ \| __| '_ \ / _ \ '__|
  / ___ \  __/| |_| | | |  __/ |
 /_/   \_\___|\__|_| |_|\___|_|
-Hello! I'm Aether.
-What can I do for you?
+Hello! I'm Aether, your calm guide through a busy day.
+What shall we bring into focus?
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [D][ ] return book (by: Oct 15 2019)
 Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Nice! I've marked this task as done:
+Excellent - this task is complete:
   [D][X] return book (by: Oct 15 2019)
 ____________________________________________________________
 ____________________________________________________________
-OK, I've marked this task as not done yet:
+No problem - this task is back in motion:
   [D][ ] return book (by: Oct 15 2019)
 ____________________________________________________________
 ____________________________________________________________
@@ -270,7 +272,7 @@ Here are the tasks in your list:
 1.[D][ ] return book (by: Oct 15 2019)
 ____________________________________________________________
 ____________________________________________________________
-Bye. Hope to see you again soon!
+Until next time. May your day stay clear and focused.
 ____________________________________________________________
 ```
 
@@ -294,8 +296,8 @@ ____________________________________________________________
   / _ \ / _ \| __| '_ \ / _ \ '__|
  / ___ \  __/| |_| | | |  __/ |
 /_/   \_\___|\__|_| |_|\___|_|
-Hello! I'm Aether.
-What can I do for you?
+Hello! I'm Aether, your calm guide through a busy day.
+What shall we bring into focus?
 ____________________________________________________________
 ____________________________________________________________
 The description of a todo cannot be empty. Try: todo borrow book
@@ -307,7 +309,7 @@ ____________________________________________________________
 Here are the tasks in your list:
 ____________________________________________________________
 ____________________________________________________________
-Bye. Hope to see you again soon!
+Until next time. May your day stay clear and focused.
 ____________________________________________________________
 ```
 
@@ -338,11 +340,11 @@ ____________________________________________________________
   / _ \ / _ \| __| '_ \ / _ \ '__|
  / ___ \  __/| |_| | | |  __/ |
 /_/   \_\___|\__|_| |_|\___|_|
-Hello! I'm Aether.
-What can I do for you?
+Hello! I'm Aether, your calm guide through a busy day.
+What shall we bring into focus?
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [T][ ] read book
 Now you have 1 tasks in the list.
 ____________________________________________________________
@@ -363,16 +365,16 @@ Here are the tasks in your list:
 1.[T][ ] read book
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [D][ ] return book (by: Oct 15 2019)
 Now you have 2 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Nice! I've marked this task as done:
+Excellent - this task is complete:
   [D][X] return book (by: Oct 15 2019)
 ____________________________________________________________
 ____________________________________________________________
-Nice! I've marked this task as done:
+Excellent - this task is complete:
   [T][X] read book
 ____________________________________________________________
 ____________________________________________________________
@@ -381,7 +383,7 @@ Here are the tasks in your list:
 2.[D][X] return book (by: Oct 15 2019)
 ____________________________________________________________
 ____________________________________________________________
-Bye. Hope to see you again soon!
+Until next time. May your day stay clear and focused.
 ____________________________________________________________
 ```
 
@@ -410,8 +412,8 @@ ____________________________________________________________
   / _ \ / _ \| __| '_ \ / _ \ '__|
  / ___ \  __/| |_| | | |  __/ |
 /_/   \_\___|\__|_| |_|\___|_|
-Hello! I'm Aether.
-What can I do for you?
+Hello! I'm Aether, your calm guide through a busy day.
+What shall we bring into focus?
 ____________________________________________________________
 ____________________________________________________________
 The description of a deadline cannot be empty. Try: deadline return book /by 2019-10-15
@@ -438,7 +440,7 @@ ____________________________________________________________
 Here are the tasks in your list:
 ____________________________________________________________
 ____________________________________________________________
-Bye. Hope to see you again soon!
+Until next time. May your day stay clear and focused.
 ____________________________________________________________
 ```
 
@@ -463,8 +465,8 @@ ____________________________________________________________
   / _ \ / _ \| __| '_ \ / _ \ '__|
  / ___ \  __/| |_| | | |  __/ |
 /_/   \_\___|\__|_| |_|\___|_|
-Hello! I'm Aether.
-What can I do for you?
+Hello! I'm Aether, your calm guide through a busy day.
+What shall we bring into focus?
 ____________________________________________________________
 ____________________________________________________________
 The /by date must be a valid date in yyyy-MM-dd format. Try: deadline return book /by 2019-10-15
@@ -479,7 +481,7 @@ ____________________________________________________________
 Here are the tasks in your list:
 ____________________________________________________________
 ____________________________________________________________
-Bye. Hope to see you again soon!
+Until next time. May your day stay clear and focused.
 ____________________________________________________________
 ```
 
@@ -510,40 +512,40 @@ ____________________________________________________________
   / _ \ / _ \| __| '_ \ / _ \ '__|
  / ___ \  __/| |_| | | |  __/ |
 /_/   \_\___|\__|_| |_|\___|_|
-Hello! I'm Aether.
-What can I do for you?
+Hello! I'm Aether, your calm guide through a busy day.
+What shall we bring into focus?
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [T][ ] read book
 Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [D][ ] return book (by: Jun 06 2019)
 Now you have 2 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [E][ ] project meeting (from: Aug 06 2019 to: Aug 07 2019)
 Now you have 3 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [T][ ] join sports club
 Now you have 4 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [T][ ] borrow book
 Now you have 5 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Nice! I've marked this task as done:
+Excellent - this task is complete:
   [T][X] read book
 ____________________________________________________________
 ____________________________________________________________
-Nice! I've marked this task as done:
+Excellent - this task is complete:
   [T][X] join sports club
 ____________________________________________________________
 ____________________________________________________________
@@ -555,7 +557,7 @@ Here are the tasks in your list:
 5.[T][ ] borrow book
 ____________________________________________________________
 ____________________________________________________________
-Noted. I've removed this task:
+Consider it cleared from your orbit:
   [E][ ] project meeting (from: Aug 06 2019 to: Aug 07 2019)
 Now you have 4 tasks in the list.
 ____________________________________________________________
@@ -567,7 +569,7 @@ Here are the tasks in your list:
 4.[T][ ] borrow book
 ____________________________________________________________
 ____________________________________________________________
-Bye. Hope to see you again soon!
+Until next time. May your day stay clear and focused.
 ____________________________________________________________
 ```
 
@@ -599,16 +601,16 @@ ____________________________________________________________
   / _ \ / _ \| __| '_ \ / _ \ '__|
  / ___ \  __/| |_| | | |  __/ |
 /_/   \_\___|\__|_| |_|\___|_|
-Hello! I'm Aether.
-What can I do for you?
+Hello! I'm Aether, your calm guide through a busy day.
+What shall we bring into focus?
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [T][ ] read book
 Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [T][ ] borrow book
 Now you have 2 tasks in the list.
 ____________________________________________________________
@@ -630,12 +632,12 @@ Here are the tasks in your list:
 2.[T][ ] borrow book
 ____________________________________________________________
 ____________________________________________________________
-Noted. I've removed this task:
+Consider it cleared from your orbit:
   [T][ ] read book
 Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Noted. I've removed this task:
+Consider it cleared from your orbit:
   [T][ ] borrow book
 Now you have 0 tasks in the list.
 ____________________________________________________________
@@ -646,7 +648,7 @@ ____________________________________________________________
 Here are the tasks in your list:
 ____________________________________________________________
 ____________________________________________________________
-Bye. Hope to see you again soon!
+Until next time. May your day stay clear and focused.
 ____________________________________________________________
 ```
 
@@ -678,31 +680,31 @@ ____________________________________________________________
   / _ \ / _ \| __| '_ \ / _ \ '__|
  / ___ \  __/| |_| | | |  __/ |
 /_/   \_\___|\__|_| |_|\___|_|
-Hello! I'm Aether.
-What can I do for you?
+Hello! I'm Aether, your calm guide through a busy day.
+What shall we bring into focus?
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [T][ ] buy milk
 Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [T][ ] read book
 Now you have 2 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [D][ ] return book (by: Jun 06 2019)
 Now you have 3 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [T][ ] write report
 Now you have 4 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Nice! I've marked this task as done:
+Excellent - this task is complete:
   [D][X] return book (by: Jun 06 2019)
 ____________________________________________________________
 ____________________________________________________________
@@ -711,7 +713,7 @@ Here are the matching tasks in your list:
 3.[D][X] return book (by: Jun 06 2019)
 ____________________________________________________________
 ____________________________________________________________
-Noted. I've removed this task:
+Consider it cleared from your orbit:
   [T][ ] read book
 Now you have 3 tasks in the list.
 ____________________________________________________________
@@ -729,7 +731,7 @@ Here are the tasks in your list:
 3.[T][ ] write report
 ____________________________________________________________
 ____________________________________________________________
-Bye. Hope to see you again soon!
+Until next time. May your day stay clear and focused.
 ____________________________________________________________
 ```
 
@@ -750,14 +752,14 @@ ____________________________________________________________
   / _ \ / _ \| __| '_ \ / _ \ '__|
  / ___ \  __/| |_| | | |  __/ |
 /_/   \_\___|\__|_| |_|\___|_|
-Hello! I'm Aether.
-What can I do for you?
+Hello! I'm Aether, your calm guide through a busy day.
+What shall we bring into focus?
 ____________________________________________________________
 ____________________________________________________________
 Here are the tasks in your list:
 ____________________________________________________________
 ____________________________________________________________
-Bye. Hope to see you again soon!
+Until next time. May your day stay clear and focused.
 ____________________________________________________________
 ```
 ## Test case: sort dated tasks and reject sort arguments
@@ -785,26 +787,26 @@ ____________________________________________________________
   / _ \ / _ \| __| '_ \ / _ \ '__|
  / ___ \  __/| |_| | | |  __/ |
 /_/   \_\___|\__|_| |_|\___|_|
-Hello! I'm Aether.
-What can I do for you?
+Hello! I'm Aether, your calm guide through a busy day.
+What shall we bring into focus?
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [T][ ] buy milk
 Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [D][ ] submit report (by: Sep 12 2026)
 Now you have 2 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [E][ ] workshop (from: Sep 05 2026 to: Sep 06 2026)
 Now you have 3 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Task captured and brought into focus:
   [D][ ] renew pass (by: Sep 05 2026)
 Now you have 4 tasks in the list.
 ____________________________________________________________
@@ -812,7 +814,7 @@ ____________________________________________________________
 I don't recognise that command. Try: list, find, sort, todo, deadline, event, mark, unmark, delete, or bye.
 ____________________________________________________________
 ____________________________________________________________
-I've sorted the tasks by date.
+Your schedule is aligned by date.
 Here are the tasks in your list:
 1.[E][ ] workshop (from: Sep 05 2026 to: Sep 06 2026)
 2.[D][ ] renew pass (by: Sep 05 2026)
@@ -827,6 +829,6 @@ Here are the tasks in your list:
 4.[T][ ] buy milk
 ____________________________________________________________
 ____________________________________________________________
-Bye. Hope to see you again soon!
+Until next time. May your day stay clear and focused.
 ____________________________________________________________
 ```

@@ -18,7 +18,7 @@
                 <Insets bottom="16.0" left="20.0" right="20.0" top="16.0" />
             </padding>
             <Label styleClass="title" text="Aether" />
-            <Label styleClass="subtitle" text="Your personal task chatbot" />
+            <Label styleClass="subtitle" text="A calm guide for busy days" />
         </VBox>
     </top>
     <center>

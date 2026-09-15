@@ -43,34 +43,35 @@ public class Ui {
 
     /** Returns the chatbot greeting without console-specific divider lines. */
     public String getWelcomeMessage() {
-        return "Hello! I'm " + NAME + ".\nWhat can I do for you?";
+        return "Hello! I'm " + NAME + ", your calm guide through a busy day.\n"
+                + "What shall we bring into focus?";
     }
 
     /** Returns confirmation that a task was added. */
     public String getTaskAddedMessage(Task task, int taskCount) {
-        return "Got it. I've added this task:\n  " + task
+        return "Task captured and brought into focus:\n  " + task
                 + "\nNow you have " + taskCount + " tasks in the list.";
     }
 
     /** Returns confirmation that a task was marked as done. */
     public String getTaskMarkedMessage(Task task) {
-        return "Nice! I've marked this task as done:\n  " + task;
+        return "Excellent - this task is complete:\n  " + task;
     }
 
     /** Returns confirmation that a task was marked as not done. */
     public String getTaskUnmarkedMessage(Task task) {
-        return "OK, I've marked this task as not done yet:\n  " + task;
+        return "No problem - this task is back in motion:\n  " + task;
     }
 
     /** Returns confirmation that a task was deleted. */
     public String getTaskDeletedMessage(Task task, int taskCount) {
-        return "Noted. I've removed this task:\n  " + task
+        return "Consider it cleared from your orbit:\n  " + task
                 + "\nNow you have " + taskCount + " tasks in the list.";
     }
 
     /** Returns the task list after it has been ordered by date. */
     public String getTasksSortedMessage(String sortedTasks) {
-        return "I've sorted the tasks by date.\n" + sortedTasks;
+        return "Your schedule is aligned by date.\n" + sortedTasks;
     }
 
     /** Shows the farewell message. */
@@ -80,7 +81,7 @@ public class Ui {
 
     /** Returns the chatbot farewell without console-specific divider lines. */
     public String getGoodbyeMessage() {
-        return "Bye. Hope to see you again soon!";
+        return "Until next time. May your day stay clear and focused.";
     }
 
     /** Prints one chatbot response between horizontal divider lines. */
