@@ -2,10 +2,14 @@
 
 Aether is a personal task chatbot with a JavaFX interface. Given below are instructions on how to use it.
 
+- [User Guide](https://ernestchuaa.github.io/ip/)
+- [Download the latest release](https://github.com/ErnestChuaa/ip/releases/latest)
+
 ## Commands
 
 Dates in `deadline` and `event` commands use the ISO-8601 `yyyy-MM-dd` format.
 For example, `deadline return book /by 2019-10-15` is shown as `Oct 15 2019`.
+Event end dates must be later than their start dates, and duplicate tasks are rejected.
 
 ```
 todo DESCRIPTION
@@ -78,6 +82,6 @@ The generated file is `build\libs\aether.jar`. Copy that file to an empty folder
 java -jar "aether.jar"
 ```
 
-The JAR is generated output, so do not commit it. Creating a GitHub release for it is optional.
+The JAR is generated output, so do not commit it. Upload it as the only JAR asset in a GitHub release.
 
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
