@@ -79,14 +79,24 @@ public class Aether {
      * @return Aether's response, including a helpful error for malformed input
      */
     public String getResponse(String input) {
+        return getCommandResult(input).getMessage();
+    }
+
+    /**
+     * Processes one GUI command and identifies whether its reply represents invalid input.
+     *
+     * @param input the complete command entered by the user
+     * @return the response text together with its error state
+     */
+    public CommandResult getCommandResult(String input) {
         try {
             Command command = parser.parse(input);
             if (command.getType() == CommandType.BYE) {
-                return ui.getGoodbyeMessage();
+                return CommandResult.success(ui.getGoodbyeMessage());
             }
-            return processCommand(command);
+            return CommandResult.success(processCommand(command));
         } catch (AetherException e) {
-            return e.getMessage();
+            return CommandResult.error(e.getMessage());
         }
     }
 
@@ -204,5 +214,36 @@ public class Aether {
                     + "Repair or remove data/aether.txt, then restart Aether.");
         }
         storage.save(tasks.asList());
+    }
+
+    /** Contains one GUI response and whether it should be presented as an error. */
+    public static class CommandResult {
+        private final String message;
+        private final boolean error;
+
+        private CommandResult(String message, boolean error) {
+            this.message = message;
+            this.error = error;
+        }
+
+        /** Returns a successful command result. */
+        private static CommandResult success(String message) {
+            return new CommandResult(message, false);
+        }
+
+        /** Returns an invalid-input result. */
+        private static CommandResult error(String message) {
+            return new CommandResult(message, true);
+        }
+
+        /** Returns the response text to show in the chat. */
+        public String getMessage() {
+            return message;
+        }
+
+        /** Returns whether the response represents invalid input. */
+        public boolean isError() {
+            return error;
+        }
     }
 }

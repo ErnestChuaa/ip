@@ -29,7 +29,8 @@
 }
 
 .user-message,
-.aether-message {
+.aether-message,
+.error-message {
     -fx-padding: 11px 14px;
     -fx-background-radius: 15px;
     -fx-font-size: 14px;
@@ -48,8 +49,17 @@
     -fx-text-fill: #172033;
 }
 
+.error-message {
+    -fx-background-color: #fff1f2;
+    -fx-border-color: #e11d48;
+    -fx-border-radius: 4px 15px 15px 4px;
+    -fx-border-width: 0 0 0 4px;
+    -fx-text-fill: #881337;
+}
+
 .user-avatar,
-.aether-avatar {
+.aether-avatar,
+.error-avatar {
     -fx-alignment: center;
     -fx-background-radius: 18px;
     -fx-font-size: 10px;
@@ -67,6 +77,10 @@
 
 .aether-avatar {
     -fx-background-color: #0f766e;
+}
+
+.error-avatar {
+    -fx-background-color: #be123c;
 }
 
 .composer {

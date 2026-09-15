@@ -50,11 +50,13 @@ public class MainWindow {
     private void handleUserInput() {
         String input = userInput.getText();
         String displayedInput = input.isBlank() ? "(empty command)" : input;
-        String response = aether.getResponse(input);
+        Aether.CommandResult result = aether.getCommandResult(input);
 
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(displayedInput),
-                DialogBox.getAetherDialog(response));
+                result.isError()
+                        ? DialogBox.getErrorDialog(result.getMessage())
+                        : DialogBox.getAetherDialog(result.getMessage()));
         userInput.clear();
 
         if (input.trim().equals("bye")) {

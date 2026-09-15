@@ -1,5 +1,12 @@
 ﻿# UI Test Plan
 
+## Manual GUI checks
+
+- Resize the Aether window to its minimum size and then make it wider. Confirm that long replies wrap within the
+  available chat width and remain readable.
+- Enter `todo` without a description. Confirm that Aether's corrective reply uses the red error bubble and `!` badge,
+  while a subsequent valid `todo read book` reply uses the normal Aether bubble.
+
 Console UI tests for Aether. After each code update that changes chatbot behaviour, update this file if needed and run `python test/run_ui_tests.py` from the repository root.
 
 Dates are parsed as `LocalDate` values in the `yyyy-MM-dd` format and displayed as `MMM dd yyyy`.
