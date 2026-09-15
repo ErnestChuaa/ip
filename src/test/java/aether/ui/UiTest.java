@@ -40,9 +40,11 @@ class UiTest {
 
         assertTrue(ui.getWelcomeMessage().contains("calm guide"));
         assertTrue(ui.getTaskAddedMessage(task, 1).contains("brought into focus"));
+        assertTrue(ui.getTaskAddedMessage(task, 1).contains("1 task in the list"));
         assertTrue(ui.getTaskMarkedMessage(task).contains("complete"));
         assertTrue(ui.getTaskUnmarkedMessage(task).contains("back in motion"));
         assertTrue(ui.getTaskDeletedMessage(task, 0).contains("cleared from your orbit"));
+        assertTrue(ui.getTaskDeletedMessage(task, 0).contains("0 tasks in the list"));
         assertTrue(ui.getTasksSortedMessage("tasks").startsWith("Your schedule is aligned"));
         assertTrue(ui.getGoodbyeMessage().contains("clear and focused"));
     }

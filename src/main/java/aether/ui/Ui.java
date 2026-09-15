@@ -50,7 +50,7 @@ public class Ui {
     /** Returns confirmation that a task was added. */
     public String getTaskAddedMessage(Task task, int taskCount) {
         return "Task captured and brought into focus:\n  " + task
-                + "\nNow you have " + taskCount + " tasks in the list.";
+                + getTaskCountMessage(taskCount);
     }
 
     /** Returns confirmation that a task was marked as done. */
@@ -66,7 +66,7 @@ public class Ui {
     /** Returns confirmation that a task was deleted. */
     public String getTaskDeletedMessage(Task task, int taskCount) {
         return "Consider it cleared from your orbit:\n  " + task
-                + "\nNow you have " + taskCount + " tasks in the list.";
+                + getTaskCountMessage(taskCount);
     }
 
     /** Returns the task list after it has been ordered by date. */
@@ -94,5 +94,11 @@ public class Ui {
     /** Closes the input stream after the chatbot exits. */
     public void close() {
         scanner.close();
+    }
+
+    /** Formats a task count with the correct singular or plural noun. */
+    private String getTaskCountMessage(int taskCount) {
+        String taskNoun = taskCount == 1 ? "task" : "tasks";
+        return "\nNow you have " + taskCount + " " + taskNoun + " in the list.";
     }
 }

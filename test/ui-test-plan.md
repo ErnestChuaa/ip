@@ -43,7 +43,7 @@ ____________________________________________________________
 ____________________________________________________________
 Task captured and brought into focus:
   [T][ ] borrow book
-Now you have 1 tasks in the list.
+Now you have 1 task in the list.
 ____________________________________________________________
 ____________________________________________________________
 Here are the tasks in your list:
@@ -86,7 +86,7 @@ ____________________________________________________________
 ____________________________________________________________
 Task captured and brought into focus:
   [T][ ] read book
-Now you have 1 tasks in the list.
+Now you have 1 task in the list.
 ____________________________________________________________
 ____________________________________________________________
 That task is already in your list. Use a different description or date.
@@ -140,7 +140,7 @@ ____________________________________________________________
 ____________________________________________________________
 Task captured and brought into focus:
   [D][ ] return book (by: Oct 15 2019)
-Now you have 1 tasks in the list.
+Now you have 1 task in the list.
 ____________________________________________________________
 ____________________________________________________________
 Here are the tasks in your list:
@@ -176,7 +176,7 @@ ____________________________________________________________
 ____________________________________________________________
 Task captured and brought into focus:
   [E][ ] project meeting (from: Oct 15 2019 to: Oct 16 2019)
-Now you have 1 tasks in the list.
+Now you have 1 task in the list.
 ____________________________________________________________
 ____________________________________________________________
 Here are the tasks in your list:
@@ -222,7 +222,7 @@ ____________________________________________________________
 ____________________________________________________________
 Task captured and brought into focus:
   [T][ ] read book
-Now you have 1 tasks in the list.
+Now you have 1 task in the list.
 ____________________________________________________________
 ____________________________________________________________
 Task captured and brought into focus:
@@ -318,7 +318,7 @@ ____________________________________________________________
 ____________________________________________________________
 Task captured and brought into focus:
   [D][ ] return book (by: Oct 15 2019)
-Now you have 1 tasks in the list.
+Now you have 1 task in the list.
 ____________________________________________________________
 ____________________________________________________________
 Excellent - this task is complete:
@@ -407,7 +407,7 @@ ____________________________________________________________
 ____________________________________________________________
 Task captured and brought into focus:
   [T][ ] read book
-Now you have 1 tasks in the list.
+Now you have 1 task in the list.
 ____________________________________________________________
 ____________________________________________________________
 The description of a todo cannot be empty. Try: todo borrow book
@@ -579,7 +579,7 @@ ____________________________________________________________
 ____________________________________________________________
 Task captured and brought into focus:
   [T][ ] read book
-Now you have 1 tasks in the list.
+Now you have 1 task in the list.
 ____________________________________________________________
 ____________________________________________________________
 Task captured and brought into focus:
@@ -668,7 +668,7 @@ ____________________________________________________________
 ____________________________________________________________
 Task captured and brought into focus:
   [T][ ] read book
-Now you have 1 tasks in the list.
+Now you have 1 task in the list.
 ____________________________________________________________
 ____________________________________________________________
 Task captured and brought into focus:
@@ -695,7 +695,7 @@ ____________________________________________________________
 ____________________________________________________________
 Consider it cleared from your orbit:
   [T][ ] read book
-Now you have 1 tasks in the list.
+Now you have 1 task in the list.
 ____________________________________________________________
 ____________________________________________________________
 Consider it cleared from your orbit:
@@ -747,7 +747,7 @@ ____________________________________________________________
 ____________________________________________________________
 Task captured and brought into focus:
   [T][ ] buy milk
-Now you have 1 tasks in the list.
+Now you have 1 task in the list.
 ____________________________________________________________
 ____________________________________________________________
 Task captured and brought into focus:
@@ -854,7 +854,7 @@ ____________________________________________________________
 ____________________________________________________________
 Task captured and brought into focus:
   [T][ ] buy milk
-Now you have 1 tasks in the list.
+Now you have 1 task in the list.
 ____________________________________________________________
 ____________________________________________________________
 Task captured and brought into focus:
