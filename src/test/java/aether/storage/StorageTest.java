@@ -61,4 +61,26 @@ class StorageTest {
         assertEquals("Saved task data is corrupted at line 2. Repair or remove data/aether.txt, then restart Aether.",
                 exception.getMessage());
     }
+
+    @Test
+    void loadRejectsBlankDescriptionsAndInvalidEventRanges() throws IOException {
+        Path blankDescriptionFile = temporaryDirectory.resolve("blank.txt");
+        Files.writeString(blankDescriptionFile, "T | 0 | IA==", StandardCharsets.UTF_8);
+        Storage blankDescriptionStorage = new Storage(blankDescriptionFile);
+
+        AetherException blankException = org.junit.jupiter.api.Assertions.assertThrows(
+                AetherException.class, blankDescriptionStorage::load);
+
+        assertTrue(blankException.getMessage().contains("corrupted at line 1"));
+
+        Path invalidEventFile = temporaryDirectory.resolve("event.txt");
+        Files.writeString(invalidEventFile,
+                "E | 0 | dHJpcA== | MjAyNi0wOS0xNg== | MjAyNi0wOS0xNQ==", StandardCharsets.UTF_8);
+        Storage invalidEventStorage = new Storage(invalidEventFile);
+
+        AetherException eventException = org.junit.jupiter.api.Assertions.assertThrows(
+                AetherException.class, invalidEventStorage::load);
+
+        assertTrue(eventException.getMessage().contains("corrupted at line 1"));
+    }
 }

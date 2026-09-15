@@ -38,6 +38,12 @@ public class Deadline extends Task {
         return Optional.of(by);
     }
 
+    /** Includes the due date when comparing task details for duplicates. */
+    @Override
+    boolean hasSameDetails(Task other) {
+        return super.hasSameDetails(other) && by.equals(((Deadline) other).by);
+    }
+
     /**
      * Returns this deadline in list form, for example {@code [D][ ] return book (by: Oct 15 2019)}.
      *

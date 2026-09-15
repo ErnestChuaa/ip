@@ -88,6 +88,11 @@ public class Task {
         return Optional.empty();
     }
 
+    /** Returns whether another task has the same type and description, ignoring description letter case. */
+    boolean hasSameDetails(Task other) {
+        return type == other.type && description.equalsIgnoreCase(other.description);
+    }
+
     /**
      * Returns the checkbox and description, for example {@code [ ] read book}.
      * Subclasses prepend a type icon and may append date/time details.

@@ -54,6 +54,67 @@ Until next time. May your day stay clear and focused.
 ____________________________________________________________
 ```
 
+## Test case: reject ambiguous dates and duplicate tasks
+
+**Aim:** Date markers must be standalone and unique, event end dates must be after start dates, and an equivalent task
+is rejected without changing the task list.
+
+**Inputs:**
+```
+todo read book
+todo READ BOOK
+deadline read /bypass notes
+deadline submit /by 2026-09-15 /by 2026-09-16
+event camp /from 2026-09-16 /to 2026-09-16
+event camp /from 2026-09-17 /to 2026-09-16
+event camp /from 2026-09-15 /from 2026-09-16 /to 2026-09-17
+list
+bye
+```
+
+**Expected output:**
+```
+____________________________________________________________
+    _         _   _
+   / \   ___ | |_| |__   ___ _ __
+  / _ \ / _ \| __| '_ \ / _ \ '__|
+ / ___ \  __/| |_| | | |  __/ |
+/_/   \_\___|\__|_| |_|\___|_|
+Hello! I'm Aether, your calm guide through a busy day.
+What shall we bring into focus?
+____________________________________________________________
+____________________________________________________________
+Task captured and brought into focus:
+  [T][ ] read book
+Now you have 1 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+That task is already in your list. Use a different description or date.
+____________________________________________________________
+____________________________________________________________
+A deadline needs a /by date. Try: deadline return book /by 2019-10-15
+____________________________________________________________
+____________________________________________________________
+Use /by only once in a command.
+____________________________________________________________
+____________________________________________________________
+The /to date must be after the /from date. Try: event project meeting /from 2019-10-15 /to 2019-10-16
+____________________________________________________________
+____________________________________________________________
+The /to date must be after the /from date. Try: event project meeting /from 2019-10-15 /to 2019-10-16
+____________________________________________________________
+____________________________________________________________
+Use /from only once in a command.
+____________________________________________________________
+____________________________________________________________
+Here are the tasks in your list:
+1.[T][ ] read book
+____________________________________________________________
+____________________________________________________________
+Until next time. May your day stay clear and focused.
+____________________________________________________________
+```
+
 ## Test case: add a deadline
 
 **Aim:** A `deadline` command stores a task with type `D`, parses its `/by` date, and displays it readably.

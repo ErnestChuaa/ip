@@ -46,6 +46,16 @@ public class Event extends Task {
         return Optional.of(from);
     }
 
+    /** Includes both event dates when comparing task details for duplicates. */
+    @Override
+    boolean hasSameDetails(Task other) {
+        if (!super.hasSameDetails(other)) {
+            return false;
+        }
+        Event otherEvent = (Event) other;
+        return from.equals(otherEvent.from) && to.equals(otherEvent.to);
+    }
+
     /**
      * Returns this event in list form, for example
      * {@code [E][ ] project meeting (from: Oct 15 2019 to: Oct 16 2019)}.

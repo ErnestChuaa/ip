@@ -103,16 +103,21 @@ public class Storage {
             switch (fields[0]) {
                 case "T":
                     requireFieldCount(fields, 3);
-                    task = new Todo(decode(fields[2]));
+                    task = new Todo(decodeDescription(fields[2]));
                     break;
                 case "D":
                     requireFieldCount(fields, 4);
-                    task = new Deadline(decode(fields[2]), LocalDate.parse(decode(fields[3])));
+                    task = new Deadline(decodeDescription(fields[2]), LocalDate.parse(decode(fields[3])));
                     break;
                 case "E":
                     requireFieldCount(fields, 5);
-                    task = new Event(decode(fields[2]), LocalDate.parse(decode(fields[3])),
-                            LocalDate.parse(decode(fields[4])));
+                    String description = decodeDescription(fields[2]);
+                    LocalDate from = LocalDate.parse(decode(fields[3]));
+                    LocalDate to = LocalDate.parse(decode(fields[4]));
+                    if (!from.isBefore(to)) {
+                        throw new IllegalArgumentException();
+                    }
+                    task = new Event(description, from, to);
                     break;
                 default:
                     throw new IllegalArgumentException();
@@ -160,5 +165,14 @@ public class Storage {
     /** Decodes user-provided text from the file format. */
     private String decode(String text) {
         return new String(Base64.getDecoder().decode(text), StandardCharsets.UTF_8);
+    }
+
+    /** Decodes a task description and rejects empty or whitespace-only saved values. */
+    private String decodeDescription(String text) {
+        String description = decode(text);
+        if (description.isBlank()) {
+            throw new IllegalArgumentException();
+        }
+        return description;
     }
 }

@@ -98,4 +98,18 @@ class TaskListTest {
         assertThrows(UnsupportedOperationException.class, () -> taskView.add(new Todo("borrow book")));
         assertEquals(1, tasks.getTaskCount());
     }
+
+    @Test
+    void containsEquivalentTaskComparesTypeDescriptionAndDates() {
+        TaskList tasks = new TaskList(
+                new Todo("Read book"),
+                new Deadline("submit report", LocalDate.of(2026, 9, 20)),
+                new Event("camp", LocalDate.of(2026, 9, 21), LocalDate.of(2026, 9, 22)));
+
+        assertEquals(true, tasks.containsEquivalentTask(new Todo("read book")));
+        assertEquals(false, tasks.containsEquivalentTask(
+                new Deadline("submit report", LocalDate.of(2026, 9, 21))));
+        assertEquals(false, tasks.containsEquivalentTask(
+                new Event("camp", LocalDate.of(2026, 9, 21), LocalDate.of(2026, 9, 23))));
+    }
 }

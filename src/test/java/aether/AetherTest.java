@@ -38,6 +38,19 @@ class AetherTest {
         assertEquals("Here are the tasks in your list:", aether.getResponse("list"));
         assertEquals(originalData, Files.readString(dataFile, StandardCharsets.UTF_8));
     }
+
+    @Test
+    void duplicateTaskIsRejectedWithoutChangingSavedTasks() {
+        Path dataFile = temporaryDirectory.resolve("aether.txt");
+        Aether aether = new Aether(dataFile);
+
+        aether.getResponse("deadline Submit report /by 2026-09-20");
+
+        assertTrue(aether.getResponse("deadline submit report /by 2026-09-20").contains("already in your list"));
+        assertEquals("Here are the tasks in your list:\n"
+                + "1.[D][ ] Submit report (by: Sep 20 2026)", aether.getResponse("list"));
+    }
+
     @Test
     void sortOrdersTasksByDateAndSavesTheNewOrder() {
         Path dataFile = temporaryDirectory.resolve("aether.txt");

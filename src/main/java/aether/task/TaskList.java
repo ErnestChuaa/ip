@@ -36,6 +36,17 @@ public class TaskList {
         tasks.add(task);
     }
 
+    /**
+     * Returns whether the list already contains a task of the same type with the same details.
+     * Description matching ignores letter case to avoid near-identical accidental duplicates.
+     *
+     * @param candidate task whose details should be checked
+     * @return true if an equivalent task already exists
+     */
+    public boolean containsEquivalentTask(Task candidate) {
+        return tasks.stream().anyMatch(candidate::hasSameDetails);
+    }
+
     /** Removes and returns the last task, used to undo a failed save after adding a task. */
     public Task removeLastTask() {
         assert !tasks.isEmpty() : "A task must exist before it can be removed.";

@@ -133,6 +133,9 @@ public class Aether {
 
     /** Adds a task, saving it before returning the confirmation. */
     private String addTask(Task task) throws AetherException {
+        if (tasks.containsEquivalentTask(task)) {
+            throw new AetherException("That task is already in your list. Use a different description or date.");
+        }
         tasks.addTask(task);
         try {
             saveTasks();

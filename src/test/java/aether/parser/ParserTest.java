@@ -27,6 +27,7 @@ class ParserTest {
 
     @Test
     void parseRejectsEmptyUnknownAndUnexpectedArguments() {
+        assertError(null, "Please type a command");
         assertError("   ", "Please type a command");
         assertError("find", "search keyword cannot be empty");
         assertError("remind buy milk", "I don't recognise that command");
@@ -82,6 +83,18 @@ class ParserTest {
         assertCreateTaskError("deadline return book /by 2019-02-30", "/by date must be a valid date");
         assertCreateTaskError("event project meeting /from invalid /to 2019-10-16", "/from date must be a valid date");
         assertCreateTaskError("event project meeting /from 2019-10-15 /to invalid", "/to date must be a valid date");
+    }
+
+    @Test
+    void createTaskRejectsDuplicateEmbeddedAndInvalidDateMarkers() throws AetherException {
+        assertCreateTaskError("deadline read /bypass notes", "deadline needs a /by date");
+        assertCreateTaskError("deadline submit /by 2026-09-15 /by 2026-09-16", "Use /by only once");
+        assertCreateTaskError("event camp /from 2026-09-15 /from 2026-09-16 /to 2026-09-17",
+                "Use /from only once");
+        assertCreateTaskError("event camp /from 2026-09-15 /to 2026-09-16 /to 2026-09-17",
+                "Use /to only once");
+        assertCreateTaskError("event camp /from 2026-09-16 /to 2026-09-16", "/to date must be after");
+        assertCreateTaskError("event camp /from 2026-09-17 /to 2026-09-16", "/to date must be after");
     }
 
     @Test

@@ -2,6 +2,8 @@ package aether.parser;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import aether.exception.AetherException;
 import aether.task.Deadline;
@@ -23,6 +25,9 @@ public class Parser {
      * @throws AetherException if the input is empty, unknown, or has unexpected arguments
      */
     public Command parse(String userInput) throws AetherException {
+        if (userInput == null) {
+            throw new AetherException("Please type a command. " + COMMAND_HINT);
+        }
         String trimmed = userInput.trim();
         if (trimmed.isEmpty()) {
             throw new AetherException("Please type a command. " + COMMAND_HINT);
@@ -111,12 +116,13 @@ public class Parser {
 
     /** Creates a deadline after separating its description and /by date. */
     private Deadline createDeadline(String arguments) throws AetherException {
-        int byIndex = arguments.indexOf("/by");
+        MarkerPosition byMarker = findSingleMarker(arguments, "/by");
+        int byIndex = byMarker.getStart();
         if (byIndex < 0) {
             throw new AetherException("A deadline needs a /by date. Try: deadline return book /by 2019-10-15");
         }
         String description = arguments.substring(0, byIndex).trim();
-        String by = arguments.substring(byIndex + "/by".length()).trim();
+        String by = arguments.substring(byMarker.getEnd()).trim();
         if (description.isEmpty()) {
             throw new AetherException(
                     "The description of a deadline cannot be empty. Try: deadline return book /by 2019-10-15");
@@ -130,8 +136,10 @@ public class Parser {
 
     /** Creates an event after separating its description, /from date, and /to date. */
     private Event createEvent(String arguments) throws AetherException {
-        int fromIndex = arguments.indexOf("/from");
-        int toIndex = arguments.indexOf("/to");
+        MarkerPosition fromMarker = findSingleMarker(arguments, "/from");
+        MarkerPosition toMarker = findSingleMarker(arguments, "/to");
+        int fromIndex = fromMarker.getStart();
+        int toIndex = toMarker.getStart();
         if (fromIndex < 0 || toIndex < 0) {
             throw new AetherException("An event needs /from and /to dates. Try: event project meeting /from "
                     + "2019-10-15 /to 2019-10-16");
@@ -142,8 +150,8 @@ public class Parser {
         }
 
         String description = arguments.substring(0, fromIndex).trim();
-        String from = arguments.substring(fromIndex + "/from".length(), toIndex).trim();
-        String to = arguments.substring(toIndex + "/to".length()).trim();
+        String from = arguments.substring(fromMarker.getEnd(), toIndex).trim();
+        String to = arguments.substring(toMarker.getEnd()).trim();
         if (description.isEmpty()) {
             throw new AetherException("The description of an event cannot be empty. Try: event project meeting "
                     + "/from 2019-10-15 /to 2019-10-16");
@@ -158,7 +166,26 @@ public class Parser {
         }
         LocalDate startDate = parseDate(from, "/from date", "event project meeting /from 2019-10-15 /to 2019-10-16");
         LocalDate endDate = parseDate(to, "/to date", "event project meeting /from 2019-10-15 /to 2019-10-16");
+        if (!startDate.isBefore(endDate)) {
+            throw new AetherException("The /to date must be after the /from date. Try: event project meeting "
+                    + "/from 2019-10-15 /to 2019-10-16");
+        }
         return new Event(description, startDate, endDate);
+    }
+
+    /** Finds one standalone date marker and rejects an ambiguous duplicate marker. */
+    private MarkerPosition findSingleMarker(String arguments, String marker) throws AetherException {
+        Pattern markerPattern = Pattern.compile("(?<!\\S)" + Pattern.quote(marker) + "(?!\\S)");
+        Matcher matcher = markerPattern.matcher(arguments);
+        if (!matcher.find()) {
+            return MarkerPosition.notFound();
+        }
+
+        MarkerPosition position = new MarkerPosition(matcher.start(), matcher.end());
+        if (matcher.find()) {
+            throw new AetherException("Use " + marker + " only once in a command.");
+        }
+        return position;
     }
 
     /** Parses a date in the ISO-8601 format used by Aether commands. */
@@ -174,5 +201,28 @@ public class Parser {
     /** Creates the standard message used when no supported command matches the input. */
     private AetherException unknownCommand() {
         return new AetherException("I don't recognise that command. " + COMMAND_HINT);
+    }
+
+    /** Stores the start and end indexes of a standalone command marker. */
+    private static class MarkerPosition {
+        private final int start;
+        private final int end;
+
+        private MarkerPosition(int start, int end) {
+            this.start = start;
+            this.end = end;
+        }
+
+        private static MarkerPosition notFound() {
+            return new MarkerPosition(-1, -1);
+        }
+
+        private int getStart() {
+            return start;
+        }
+
+        private int getEnd() {
+            return end;
+        }
     }
 }
