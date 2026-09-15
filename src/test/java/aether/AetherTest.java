@@ -1,9 +1,14 @@
 package aether;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -52,6 +57,63 @@ class AetherTest {
     }
 
     @Test
+    void commandResultDistinguishesSuccessfulAndInvalidCommands() {
+        Aether aether = new Aether(temporaryDirectory.resolve("aether.txt"));
+
+        Aether.CommandResult success = aether.getCommandResult("list");
+        Aether.CommandResult error = aether.getCommandResult("unknown");
+
+        assertEquals("Here are the tasks in your list:", success.getMessage());
+        assertFalse(success.isError());
+        assertTrue(error.getMessage().contains("don't recognise"));
+        assertTrue(error.isError());
+    }
+
+    @Test
+    void taskCommandsAddUpdateFindAndDeleteTasks() {
+        Aether aether = new Aether(temporaryDirectory.resolve("aether.txt"));
+
+        assertTrue(aether.getResponse("todo read book").contains("[T][ ] read book"));
+        assertTrue(aether.getResponse("deadline submit /by 2026-09-20").contains("[D][ ] submit"));
+        assertTrue(aether.getResponse("event camp /from 2026-09-21 /to 2026-09-22").contains("[E][ ] camp"));
+        assertTrue(aether.getResponse("mark 2").contains("[D][X] submit"));
+        assertTrue(aether.getResponse("unmark 2").contains("[D][ ] submit"));
+        assertTrue(aether.getResponse("find CAMP").contains("3.[E][ ] camp"));
+        assertTrue(aether.getResponse("delete 1").contains("[T][ ] read book"));
+        assertTrue(aether.getResponse("list").contains("1.[D][ ] submit"));
+    }
+
+    @Test
+    void failedSaveRollsBackAddMarkDeleteAndSort() throws IOException {
+        assertAddRollsBackWhenSaveFails(temporaryDirectory.resolve("add.txt"));
+        assertMarkRollsBackWhenSaveFails(temporaryDirectory.resolve("mark.txt"));
+        assertDeleteRollsBackWhenSaveFails(temporaryDirectory.resolve("delete.txt"));
+        assertSortRollsBackWhenSaveFails(temporaryDirectory.resolve("sort.txt"));
+    }
+
+    @Test
+    void runProcessesCommandsReportsErrorsAndStopsAtBye() {
+        InputStream originalInput = System.in;
+        PrintStream originalOutput = System.out;
+        ByteArrayOutputStream capturedOutput = new ByteArrayOutputStream();
+        try {
+            System.setIn(new ByteArrayInputStream("todo\ntodo read book\nbye\n".getBytes(StandardCharsets.UTF_8)));
+            System.setOut(new PrintStream(capturedOutput, true, StandardCharsets.UTF_8));
+            Aether aether = new Aether(temporaryDirectory.resolve("aether.txt"));
+
+            aether.run();
+
+            String output = capturedOutput.toString(StandardCharsets.UTF_8);
+            assertTrue(output.contains("description of a todo cannot be empty"));
+            assertTrue(output.contains("[T][ ] read book"));
+            assertTrue(output.contains("Until next time"));
+        } finally {
+            System.setIn(originalInput);
+            System.setOut(originalOutput);
+        }
+    }
+
+    @Test
     void sortOrdersTasksByDateAndSavesTheNewOrder() {
         Path dataFile = temporaryDirectory.resolve("aether.txt");
         Aether aether = new Aether(dataFile);
@@ -73,5 +135,51 @@ class AetherTest {
                 + "2.[D][ ] renew pass (by: Sep 05 2026)\n"
                 + "3.[D][ ] submit report (by: Sep 12 2026)\n"
                 + "4.[T][ ] buy milk", reloadedAether.getResponse("list"));
+    }
+
+    /** Confirms an added task is removed again when its save fails. */
+    private void assertAddRollsBackWhenSaveFails(Path dataFile) throws IOException {
+        Aether aether = new Aether(dataFile);
+        Files.createDirectory(dataFile);
+
+        assertTrue(aether.getResponse("todo read book").contains("could not save"));
+        assertEquals("Here are the tasks in your list:", aether.getResponse("list"));
+    }
+
+    /** Confirms a status change is undone when its save fails. */
+    private void assertMarkRollsBackWhenSaveFails(Path dataFile) throws IOException {
+        Aether aether = new Aether(dataFile);
+        aether.getResponse("todo read book");
+        replaceFileWithDirectory(dataFile);
+
+        assertTrue(aether.getResponse("mark 1").contains("could not save"));
+        assertTrue(aether.getResponse("list").contains("1.[T][ ] read book"));
+    }
+
+    /** Confirms a deletion is undone when its save fails. */
+    private void assertDeleteRollsBackWhenSaveFails(Path dataFile) throws IOException {
+        Aether aether = new Aether(dataFile);
+        aether.getResponse("todo read book");
+        replaceFileWithDirectory(dataFile);
+
+        assertTrue(aether.getResponse("delete 1").contains("could not save"));
+        assertTrue(aether.getResponse("list").contains("1.[T][ ] read book"));
+    }
+
+    /** Confirms sorting is undone when its save fails. */
+    private void assertSortRollsBackWhenSaveFails(Path dataFile) throws IOException {
+        Aether aether = new Aether(dataFile);
+        aether.getResponse("todo read book");
+        aether.getResponse("deadline submit /by 2026-09-20");
+        replaceFileWithDirectory(dataFile);
+
+        assertTrue(aether.getResponse("sort").contains("could not save"));
+        assertTrue(aether.getResponse("list").contains("1.[T][ ] read book\n2.[D][ ] submit"));
+    }
+
+    /** Replaces a temporary data file with a directory so subsequent saves fail safely. */
+    private void replaceFileWithDirectory(Path dataFile) throws IOException {
+        Files.delete(dataFile);
+        Files.createDirectory(dataFile);
     }
 }

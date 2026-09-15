@@ -1,8 +1,10 @@
 package aether.task;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -106,10 +108,10 @@ class TaskListTest {
                 new Deadline("submit report", LocalDate.of(2026, 9, 20)),
                 new Event("camp", LocalDate.of(2026, 9, 21), LocalDate.of(2026, 9, 22)));
 
-        assertEquals(true, tasks.containsEquivalentTask(new Todo("read book")));
-        assertEquals(false, tasks.containsEquivalentTask(
+        assertTrue(tasks.containsEquivalentTask(new Todo("read book")));
+        assertFalse(tasks.containsEquivalentTask(
                 new Deadline("submit report", LocalDate.of(2026, 9, 21))));
-        assertEquals(false, tasks.containsEquivalentTask(
+        assertFalse(tasks.containsEquivalentTask(
                 new Event("camp", LocalDate.of(2026, 9, 21), LocalDate.of(2026, 9, 23))));
     }
 }

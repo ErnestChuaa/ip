@@ -83,4 +83,42 @@ class StorageTest {
 
         assertTrue(eventException.getMessage().contains("corrupted at line 1"));
     }
+
+    @Test
+    void loadRejectsMalformedRecordVariants() throws IOException {
+        String[] malformedRecords = {
+            "T | 0",
+            "X | 0 | dGFzaw==",
+            "T | 2 | dGFzaw==",
+            "T | 0 | not-base64",
+            "D | 0 | dGFzaw== | bm90LWEtZGF0ZQ==",
+            "D | 0 | dGFzaw== | MjAyNi0wOS0yMA== | extra"
+        };
+
+        for (int index = 0; index < malformedRecords.length; index++) {
+            Path dataFile = temporaryDirectory.resolve("malformed-" + index + ".txt");
+            Files.writeString(dataFile, malformedRecords[index], StandardCharsets.UTF_8);
+            Storage storage = new Storage(dataFile);
+
+            AetherException exception = org.junit.jupiter.api.Assertions.assertThrows(
+                    AetherException.class, storage::load);
+
+            assertTrue(exception.getMessage().contains("corrupted at line 1"));
+        }
+    }
+
+    @Test
+    void loadAndSaveReportIoFailures() throws IOException {
+        Path directoryPath = temporaryDirectory.resolve("not-a-file");
+        Files.createDirectory(directoryPath);
+        Storage storage = new Storage(directoryPath);
+
+        AetherException loadException = org.junit.jupiter.api.Assertions.assertThrows(
+                AetherException.class, storage::load);
+        AetherException saveException = org.junit.jupiter.api.Assertions.assertThrows(
+                AetherException.class, () -> storage.save(List.of(new Todo("task"))));
+
+        assertTrue(loadException.getMessage().contains("could not read"));
+        assertTrue(saveException.getMessage().contains("could not save"));
+    }
 }

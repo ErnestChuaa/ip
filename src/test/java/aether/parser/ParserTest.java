@@ -66,6 +66,13 @@ class ParserTest {
     }
 
     @Test
+    void createTaskRejectsCommandsThatDoNotCreateTasks() throws AetherException {
+        Command listCommand = parser.parse("list");
+
+        assertThrows(IllegalArgumentException.class, () -> parser.createTask(listCommand));
+    }
+
+    @Test
     void createTaskRejectsMissingOrEmptyRequiredFields() throws AetherException {
         assertCreateTaskError("todo", "description of a todo cannot be empty");
         assertCreateTaskError("deadline return book", "deadline needs a /by date");
